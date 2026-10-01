@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CCR Screening Tool - PT Bima Nusa Internasional</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- SheetJS untuk Membaca Excel di Browser -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen p-4 md:p-6">
+
+    <!-- Header -->
+    <div class="max-w-7xl mx-auto bg-slate-900 text-white rounded-xl shadow-lg p-5 mb-6 border-b-4 border-red-600">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <img src="./logo.png" alt="BNI Logo" class="h-10 w-auto object-contain bg-white/10 p-1 rounded" onerror="this.onerror=null; this.src='logo.PNG';">
+                <div>
+                    <h1 class="text-xl font-bold tracking-wide">CCR DATA SCREENING TOOL</h1>
+                    <p class="text-xs text-slate-400">Pemeriksaan Otomatis Input HM/EWH & Keterlambatan Tim CCR</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Drag and Drop Zone -->
+    <div class="max-w-7xl mx-auto mb-6">
+        <div id="dropZone" class="border-2 border-dashed border-slate-400 bg-white hover:bg-slate-50 transition rounded-xl p-8 text-center cursor-pointer shadow-sm">
+            <svg class="mx-auto h-12 w-12 text-slate-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+            </svg>
+            <p class="text-sm font-bold text-slate-700">Tarik & Lepaskan File Excel di Sini</p>
+            <p class="text-xs text-slate-400 mt-1">Mendukung file (.xlsx, .xls) dari Summary Productivity atau Input Time</p>
+            <input type="file" id="fileInput" accept=".xlsx, .xls" class="hidden">
+        </div>
+    </div>
+
+    <!-- Ringkasan KPI Screening -->
+    <div id="kpiSection" class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6 hidden">
+        <div class="bg-white p-4 rounded-xl shadow border border-slate-200">
+            <p class="text-xs font-bold text-slate-500 uppercase">Total Data Diperiksa</p>
+            <p id="totalRecords" class="text-2xl font-black text-slate-900 mt-1">0</p>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow border border-slate-200">
+            <p class="text-xs font-bold text-slate-500 uppercase">Input SALAH (HM > EWH)</p>
+            <p id="totalSalah" class="text-2xl font-black text-red-600 mt-1">0</p>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow border border-slate-200">
+            <p class="text-xs font-bold text-slate-500 uppercase">Input LAMBAT (> 1 Jam)</p>
+            <p id="totalLambat" class="text-2xl font-black text-amber-600 mt-1">0</p>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow border border-slate-200">
+            <p class="text-xs font-bold text-slate-500 uppercase">Akurasi & On-Time</p>
+            <p id="totalValid" class="text-2xl font-black text-emerald-600 mt-1">0</p>
+        </div>
+    </div>
+
+    <!-- Tabel Hasil Screening -->
+    <div id="resultSection" class="max-w-7xl mx-auto bg-white rounded-xl shadow border border-slate-200 overflow-hidden hidden">
+        <div class="p-4 bg-slate-50 border-b border-slate-200 font-bold text-xs text-slate-700 uppercase tracking-wider flex justify-between items-center">
+            <span>Hasil Anomali Data & Kinerja CCR</span>
+            <span id="fileNameBadge" class="text-xs bg-slate-200 text-slate-700 px-2 py-1 rounded font-mono"></span>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs">
+                <thead class="bg-slate-900 text-white uppercase font-semibold text-[11px]">
+                    <tr>
+                        <th class="p-3">No</th>
+                        <th class="p-3">No. Lambung / Unit</th>
+                        <th class="p-3">PIC / Operator</th>
+                        <th class="p-3">Kategori Temuan</th>
+                        <th class="p-3">Nilai HM / Start</th>
+                        <th class="p-3">Nilai EWH / Entry</th>
+                        <th class="p-3">Selisih / Durasi</th>
+                        <th class="p-3">Keterangan Tambahan</th>
+                    </tr>
+                </thead>
+                <tbody id="resultTableBody" class="divide-y divide-slate-200">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+
+        dropZone.addEventListener('click', () => fileInput.click());
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('bg-slate-100');
+        });
+
+        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('bg-slate-100'));
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('bg-slate-100');
+            if (e.dataTransfer.files.length) {
+                handleFile(e.dataTransfer.files[0]);
+            }
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) {
+                handleFile(e.target.files[0]);
+            }
+        });
+
+        function handleFile(file) {
+            document.getElementById('fileNameBadge').innerText = file.name;
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: 'array', cellDates: true });
+                
+                const firstSheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[firstSheetName];
+                const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+
+                processData(jsonData);
+            };
+
+            reader.readAsArrayBuffer(file);
+        }
+
+        function processData(data) {
+            if (!data.length) {
+                alert("File kosong atau format tidak terbaca!");
+                return;
+            }
+
+            let countSalah = 0;
+            let countLambat = 0;
+            let countValid = 0;
+            let resultsHTML = "";
+
+            data.forEach((row, index) => {
+                // Mencari nama kolom secara fleksibel (case-insensitive)
+                const keys = Object.keys(row);
+                
+                const unitKey = keys.find(k => /lambung|unit|cn/i.test(k));
+                const picKey = keys.find(k => /pic|operator|created|user/i.test(k));
+                const hmKey = keys.find(k => /^hm$|hm actual|hm total/i.test(k));
+                const ewhKey = keys.find(k => /ewh|estimated/i.test(k));
+                
+                const openKey = keys.find(k => /open|event|start/i.test(k));
+                const entryKey = keys.find(k => /entry|input|created/i.test(k));
+
+                const unit = row[unitKey] || "-";
+                const pic = row[picKey] || "-";
+
+                let isSalah = false;
+                let isLambat = false;
+                let statusBadge = "";
+                let val1 = "-", val2 = "-", selisih = "-", ket = "-";
+
+                // 1. Cek Kategori SALAH (HM vs EWH)
+                if (hmKey && ewhKey) {
+                    const hmVal = parseFloat(row[hmKey]) || 0;
+                    const ewhVal = parseFloat(row[ewhKey]) || 0;
+                    val1 = hmVal;
+                    val2 = ewhVal;
+
+                    if (hmVal > ewhVal && ewhVal > 0) {
+                        isSalah = true;
+                        countSalah++;
+                        const diff = (hmVal - ewhVal).toFixed(2);
+                        selisih = `+${diff} Jam`;
+                        statusBadge = `<span class="bg-red-100 text-red-700 px-2 py-0.5 rounded font-bold">SALAH (HM > EWH)</span>`;
+                        ket = `HM (${hmVal}) melebihi EWH (${ewhVal})`;
+                    }
+                }
+
+                // 2. Cek Kategori LAMBAT (Durasi Input Time)
+                if (openKey && entryKey && !isSalah) {
+                    const openTime = new Date(row[openKey]);
+                    const entryTime = new Date(row[entryKey]);
+
+                    if (!isNaN(openTime) && !isNaN(entryTime)) {
+                        val1 = openTime.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+                        val2 = entryTime.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+
+                        const diffMinutes = (entryTime - openTime) / (1000 * 60);
+                        const diffHours = (diffMinutes / 60).toFixed(2);
+
+                        if (diffMinutes > 60) {
+                            isLambat = true;
+                            countLambat++;
+                            selisih = `${diffHours} Jam`;
+                            statusBadge = `<span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded font-bold">LAMBAT (> 1 Jam)</span>`;
+                            ket = `Input butuh waktu ${diffMinutes.toFixed(0)} menit dari open case`;
+                        }
+                    }
+                }
+
+                if (!isSalah && !isLambat) {
+                    countValid++;
+                    statusBadge = `<span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded font-bold">VALID / ON-TIME</span>`;
+                }
+
+                resultsHTML += `
+                    <tr class="${isSalah ? 'bg-red-50/50' : (isLambat ? 'bg-amber-50/50' : 'hover:bg-slate-50')} transition">
+                        <td class="p-3 text-slate-500 font-mono">${index + 1}</td>
+                        <td class="p-3 font-bold text-slate-900">${unit}</td>
+                        <td class="p-3 font-medium text-slate-800">${pic}</td>
+                        <td class="p-3">${statusBadge}</td>
+                        <td class="p-3 font-mono">${val1}</td>
+                        <td class="p-3 font-mono">${val2}</td>
+                        <td class="p-3 font-bold ${isSalah ? 'text-red-600' : (isLambat ? 'text-amber-600' : 'text-slate-600')}">${selisih}</td>
+                        <td class="p-3 text-slate-500">${ket}</td>
+                    </tr>
+                `;
+            });
+
+            // Update DOM Stats
+            document.getElementById('totalRecords').innerText = data.length;
+            document.getElementById('totalSalah').innerText = countSalah;
+            document.getElementById('totalLambat').innerText = countLambat;
+            document.getElementById('totalValid').innerText = countValid;
+
+            document.getElementById('resultTableBody').innerHTML = resultsHTML;
+
+            // Tampilkan Section
+            document.getElementById('kpiSection').classList.remove('hidden');
+            document.getElementById('resultSection').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
