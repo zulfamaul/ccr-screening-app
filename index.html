@@ -20,29 +20,68 @@
                 <img src="./logo.png" alt="BNI Logo" class="h-10 w-auto object-contain bg-white/10 p-1 rounded" onerror="this.onerror=null; this.src='logo.PNG';">
                 <div>
                     <h1 class="text-xl font-bold tracking-wide">CCR DATA SCREENING & ANALYTICS</h1>
-                    <p class="text-xs text-slate-400">Modul Terpisah: Summary Productivity & Input Time Latency</p>
+                    <p class="text-xs text-slate-400">Pemeriksaan Otomatis Summary Productivity & Input Time Latency</p>
                 </div>
             </div>
-            <span id="fileNameBadge" class="text-xs bg-slate-800 border border-slate-700 text-slate-300 px-3 py-1.5 rounded-lg font-mono hidden"></span>
+            <button onclick="resetAll()" class="text-xs bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 px-3 py-1.5 rounded-lg transition self-start md:self-auto">
+                🔄 Reset / Clean Data
+            </button>
         </div>
     </div>
 
-    <!-- Drag and Drop Zone -->
-    <div class="max-w-7xl mx-auto mb-6">
-        <div id="dropZone" class="border-2 border-dashed border-slate-400 bg-white hover:bg-slate-50 transition rounded-xl p-8 text-center cursor-pointer shadow-sm">
-            <svg class="mx-auto h-12 w-12 text-slate-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-            </svg>
-            <p class="text-sm font-bold text-slate-700">Tarik & Lepaskan File Excel di Sini</p>
-            <p class="text-xs text-slate-400 mt-1">Mendukung file (.xlsx, .xls) dari Summary Productivity atau Input Time</p>
-            <input type="file" id="fileInput" accept=".xlsx, .xls" class="hidden">
+    <!-- 2 Box Upload Terpisah -->
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        
+        <!-- Box 1: Summary Productivity -->
+        <div class="bg-white rounded-xl shadow border border-slate-200 p-5 flex flex-col justify-between">
+            <div>
+                <div class="flex items-center justify-between mb-3 border-b pb-2">
+                    <span class="font-bold text-sm text-red-600 flex items-center gap-2">
+                        📊 1. SUMMARY PRODUCTIVITY
+                    </span>
+                    <span id="badgeProd" class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded font-mono">Belum Diupload</span>
+                </div>
+                <p class="text-xs text-slate-500 mb-4">Upload file Excel *Summary Productivity* untuk mengecek anomali **HM > EWH**.</p>
+            </div>
+
+            <div id="dropZoneProd" class="border-2 border-dashed border-red-200 hover:border-red-400 bg-red-50/30 hover:bg-red-50 transition rounded-xl p-6 text-center cursor-pointer">
+                <svg class="mx-auto h-10 w-10 text-red-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <p class="text-xs font-bold text-slate-700">Klik / Tarik File Productivity di Sini</p>
+                <p class="text-[10px] text-slate-400 mt-1">File format .xlsx / .xls</p>
+                <input type="file" id="inputProd" accept=".xlsx, .xls" class="hidden">
+            </div>
         </div>
+
+        <!-- Box 2: Input Time -->
+        <div class="bg-white rounded-xl shadow border border-slate-200 p-5 flex flex-col justify-between">
+            <div>
+                <div class="flex items-center justify-between mb-3 border-b pb-2">
+                    <span class="font-bold text-sm text-amber-600 flex items-center gap-2">
+                        ⏱️ 2. INPUT TIME LATENCY
+                    </span>
+                    <span id="badgeInput" class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded font-mono">Belum Diupload</span>
+                </div>
+                <p class="text-xs text-slate-500 mb-4">Upload file Excel *Input Time* untuk mengecek keterlambatan **> 1 Jam** (*Open vs Entry Time*).</p>
+            </div>
+
+            <div id="dropZoneInput" class="border-2 border-dashed border-amber-200 hover:border-amber-400 bg-amber-50/30 hover:bg-amber-50 transition rounded-xl p-6 text-center cursor-pointer">
+                <svg class="mx-auto h-10 w-10 text-amber-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <p class="text-xs font-bold text-slate-700">Klik / Tarik File Input Time di Sini</p>
+                <p class="text-[10px] text-slate-400 mt-1">File format .xlsx / .xls</p>
+                <input type="file" id="inputTime" accept=".xlsx, .xls" class="hidden">
+            </div>
+        </div>
+
     </div>
 
-    <!-- Section Hasil & Tab Navigasi (Sembunyi secara default) -->
+    <!-- Section Dashboard Utama -->
     <div id="mainDashboard" class="max-w-7xl mx-auto hidden">
         
-        <!-- Tab Buttons -->
+        <!-- Tab Navigation -->
         <div class="flex border-b border-slate-300 mb-6 bg-white rounded-t-xl overflow-hidden shadow-sm">
             <button id="btnTabProd" onclick="switchTab('prod')" class="flex-1 py-3.5 px-4 text-center font-bold text-sm border-b-2 border-red-600 text-red-600 bg-red-50/50 transition">
                 📊 Summary Productivity (HM vs EWH)
@@ -54,7 +93,6 @@
 
         <!-- ================= MODUL 1: SUMMARY PRODUCTIVITY ================= -->
         <div id="modulProd" class="space-y-6">
-            <!-- KPI Cards Productivity -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div class="bg-white p-4 rounded-xl shadow border border-slate-200">
                     <p class="text-xs font-bold text-slate-500 uppercase">Total Baris Productivity</p>
@@ -70,7 +108,6 @@
                 </div>
             </div>
 
-            <!-- Grafik Productivity -->
             <div class="bg-white p-5 rounded-xl shadow border border-slate-200">
                 <h3 class="text-sm font-bold text-slate-800 uppercase mb-4 border-b pb-2">Grafik Top 5 PIC / Operator dengan Input SALAH</h3>
                 <div class="h-64">
@@ -78,7 +115,6 @@
                 </div>
             </div>
 
-            <!-- Tabel Detail Productivity -->
             <div class="bg-white rounded-xl shadow border border-slate-200 overflow-hidden">
                 <div class="p-4 bg-slate-50 border-b border-slate-200 font-bold text-xs text-slate-700 uppercase">
                     Rincian Temuan Anomali HM vs EWH
@@ -105,7 +141,6 @@
 
         <!-- ================= MODUL 2: INPUT TIME ================= -->
         <div id="modulInput" class="space-y-6 hidden">
-            <!-- KPI Cards Input Time -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div class="bg-white p-4 rounded-xl shadow border border-slate-200">
                     <p class="text-xs font-bold text-slate-500 uppercase">Total Record Input Time</p>
@@ -121,7 +156,6 @@
                 </div>
             </div>
 
-            <!-- Grafik Input Time -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="bg-white p-5 rounded-xl shadow border border-slate-200">
                     <h3 class="text-sm font-bold text-slate-800 uppercase mb-4 border-b pb-2">Persentase Ketepatan Waktu Input</h3>
@@ -137,7 +171,6 @@
                 </div>
             </div>
 
-            <!-- Tabel Detail Input Time -->
             <div class="bg-white rounded-xl shadow border border-slate-200 overflow-hidden">
                 <div class="p-4 bg-slate-50 border-b border-slate-200 font-bold text-xs text-slate-700 uppercase">
                     Rincian Keterlambatan Input Time
@@ -165,23 +198,32 @@
     </div>
 
     <script>
-        const dropZone = document.getElementById('dropZone');
-        const fileInput = document.getElementById('fileInput');
         let chartProdPICObj = null;
         let chartInputRatioObj = null;
         let chartInputPICObj = null;
 
-        dropZone.addEventListener('click', () => fileInput.click());
-        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('bg-slate-100'); });
-        dropZone.addEventListener('dragleave', () => dropZone.classList.remove('bg-slate-100'));
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('bg-slate-100');
-            if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
-        });
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length) handleFile(e.target.files[0]);
-        });
+        // Setup Listener untuk Box 1 (Productivity)
+        setupBox('dropZoneProd', 'inputProd', (file) => processFileProd(file));
+        
+        // Setup Listener untuk Box 2 (Input Time)
+        setupBox('dropZoneInput', 'inputTime', (file) => processFileInput(file));
+
+        function setupBox(dropZoneId, inputId, callback) {
+            const dz = document.getElementById(dropZoneId);
+            const inp = document.getElementById(inputId);
+
+            dz.addEventListener('click', () => inp.click());
+            dz.addEventListener('dragover', (e) => { e.preventDefault(); dz.classList.add('bg-slate-100'); });
+            dz.addEventListener('dragleave', () => dz.classList.remove('bg-slate-100'));
+            dz.addEventListener('drop', (e) => {
+                e.preventDefault();
+                dz.classList.remove('bg-slate-100');
+                if (e.dataTransfer.files.length) callback(e.dataTransfer.files[0]);
+            });
+            inp.addEventListener('change', (e) => {
+                if (e.target.files.length) callback(e.target.files[0]);
+            });
+        }
 
         function switchTab(tab) {
             const btnProd = document.getElementById('btnTabProd');
@@ -202,106 +244,123 @@
             }
         }
 
-        function handleFile(file) {
-            const badge = document.getElementById('fileNameBadge');
-            badge.innerText = file.name;
-            badge.classList.remove('hidden');
-
+        function readExcelRows(file, callback) {
             const reader = new FileReader();
             reader.onload = function(e) {
                 const data = new Uint8Array(e.target.result);
                 const workbook = XLSX.read(data, { type: 'array', cellDates: true });
                 const worksheet = workbook.Sheets[workbook.SheetNames[0]];
                 const rawRows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: "" });
-
-                processData(rawRows);
+                callback(rawRows);
             };
             reader.readAsArrayBuffer(file);
         }
 
-        function processData(rows) {
-            if (!rows.length) return;
-
-            // Cari Header
-            let headerIdx = -1;
+        function findHeaderIndex(rows) {
             for (let i = 0; i < Math.min(rows.length, 15); i++) {
                 const rowStr = rows[i].map(c => String(c).toLowerCase().trim()).join(' ');
                 if (rowStr.includes('unit') || rowStr.includes('cn') || rowStr.includes('hm') || rowStr.includes('open') || rowStr.includes('entry')) {
-                    headerIdx = i;
-                    break;
+                    return i;
                 }
             }
-
-            if (headerIdx === -1) {
-                alert("Header kolom tidak terdeteksi secara otomatis!");
-                return;
-            }
-
-            const headers = rows[headerIdx].map(h => String(h).trim());
-            const dataRows = rows.slice(headerIdx + 1);
-
-            // Variabel Prod & Input
-            let prodData = [], inputData = [];
-            let picSalahCount = {}, picLambatCount = {};
-
-            dataRows.forEach((row) => {
-                let rowObj = {};
-                headers.forEach((h, idx) => { if (h) rowObj[h] = row[idx] !== undefined ? row[idx] : ""; });
-
-                const keys = Object.keys(rowObj);
-                const unitKey = keys.find(k => /unit|cn|lambung|equipment/i.test(k));
-                const picKey = keys.find(k => /pic|operator|driver|created\s*by|user/i.test(k));
-                const hmKey = keys.find(k => /hm\s*actual|hm\s*total|^hm$|act\s*hm/i.test(k));
-                const ewhKey = keys.find(k => /ewh|estimated|est\s*hm/i.test(k));
-                const openKey = keys.find(k => /open|event|start|breakdown/i.test(k));
-                const entryKey = keys.find(k => /entry|input|created|time\s*entry/i.test(k));
-
-                const unit = unitKey && rowObj[unitKey] ? String(rowObj[unitKey]).trim() : "-";
-                const pic = picKey && rowObj[picKey] ? String(rowObj[picKey]).trim() : "Unknown PIC";
-
-                // Deteksi Data Productivity (HM & EWH)
-                if (hmKey && ewhKey && (rowObj[hmKey] !== "" || rowObj[ewhKey] !== "")) {
-                    const hmVal = parseFloat(rowObj[hmKey]) || 0;
-                    const ewhVal = parseFloat(rowObj[ewhKey]) || 0;
-                    const isSalah = hmVal > ewhVal && ewhVal > 0;
-
-                    if (isSalah) picSalahCount[pic] = (picSalahCount[pic] || 0) + 1;
-
-                    prodData.push({
-                        unit, pic, hmVal, ewhVal, isSalah,
-                        diff: isSalah ? (hmVal - ewhVal).toFixed(2) : 0
-                    });
-                }
-
-                // Deteksi Data Input Time (Open & Entry)
-                if (openKey && entryKey && (rowObj[openKey] !== "" || rowObj[entryKey] !== "")) {
-                    const openTime = new Date(rowObj[openKey]);
-                    const entryTime = new Date(rowObj[entryKey]);
-
-                    if (!isNaN(openTime) && !isNaN(entryTime)) {
-                        const diffMinutes = (entryTime - openTime) / (1000 * 60);
-                        const isLambat = diffMinutes > 60;
-
-                        if (isLambat) picLambatCount[pic] = (picLambatCount[pic] || 0) + 1;
-
-                        inputData.push({
-                            unit, pic, openTime, entryTime, diffMinutes, isLambat
-                        });
-                    }
-                }
-            });
-
-            // Render Hasil
-            renderProdModule(prodData, picSalahCount);
-            renderInputModule(inputData, picLambatCount);
-
-            document.getElementById('mainDashboard').classList.remove('hidden');
-
-            // Switch otomatis ke modul yang berisi data
-            if (prodData.length > 0) switchTab('prod');
-            else if (inputData.length > 0) switchTab('input');
+            return -1;
         }
 
+        // ================= PROSES FILE 1: PRODUCTIVITY =================
+        function processFileProd(file) {
+            document.getElementById('badgeProd').innerText = file.name;
+            document.getElementById('badgeProd').className = "text-[10px] bg-red-100 text-red-700 px-2 py-0.5 rounded font-mono font-bold";
+
+            readExcelRows(file, (rows) => {
+                const headerIdx = findHeaderIndex(rows);
+                if (headerIdx === -1) { alert("Header file Productivity tidak terdeteksi!"); return; }
+
+                const headers = rows[headerIdx].map(h => String(h).trim());
+                const dataRows = rows.slice(headerIdx + 1);
+
+                let prodData = [];
+                let picSalahCount = {};
+
+                dataRows.forEach((row) => {
+                    let rowObj = {};
+                    headers.forEach((h, idx) => { if (h) rowObj[h] = row[idx] !== undefined ? row[idx] : ""; });
+
+                    const keys = Object.keys(rowObj);
+                    const unitKey = keys.find(k => /unit|cn|lambung|equipment/i.test(k));
+                    const picKey = keys.find(k => /pic|operator|driver|created\s*by|user/i.test(k));
+                    const hmKey = keys.find(k => /hm\s*actual|hm\s*total|^hm$|act\s*hm/i.test(k));
+                    const ewhKey = keys.find(k => /ewh|estimated|est\s*hm/i.test(k));
+
+                    const unit = unitKey && rowObj[unitKey] ? String(rowObj[unitKey]).trim() : "-";
+                    const pic = picKey && rowObj[picKey] ? String(rowObj[picKey]).trim() : "Unknown PIC";
+
+                    if (hmKey && ewhKey && (rowObj[hmKey] !== "" || rowObj[ewhKey] !== "")) {
+                        const hmVal = parseFloat(rowObj[hmKey]) || 0;
+                        const ewhVal = parseFloat(rowObj[ewhKey]) || 0;
+                        const isSalah = hmVal > ewhVal && ewhVal > 0;
+
+                        if (isSalah) picSalahCount[pic] = (picSalahCount[pic] || 0) + 1;
+
+                        prodData.push({ unit, pic, hmVal, ewhVal, isSalah, diff: isSalah ? (hmVal - ewhVal).toFixed(2) : 0 });
+                    }
+                });
+
+                renderProdModule(prodData, picSalahCount);
+                document.getElementById('mainDashboard').classList.remove('hidden');
+                switchTab('prod');
+            });
+        }
+
+        // ================= PROSES FILE 2: INPUT TIME =================
+        function processFileInput(file) {
+            document.getElementById('badgeInput').innerText = file.name;
+            document.getElementById('badgeInput').className = "text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded font-mono font-bold";
+
+            readExcelRows(file, (rows) => {
+                const headerIdx = findHeaderIndex(rows);
+                if (headerIdx === -1) { alert("Header file Input Time tidak terdeteksi!"); return; }
+
+                const headers = rows[headerIdx].map(h => String(h).trim());
+                const dataRows = rows.slice(headerIdx + 1);
+
+                let inputData = [];
+                let picLambatCount = {};
+
+                dataRows.forEach((row) => {
+                    let rowObj = {};
+                    headers.forEach((h, idx) => { if (h) rowObj[h] = row[idx] !== undefined ? row[idx] : ""; });
+
+                    const keys = Object.keys(rowObj);
+                    const unitKey = keys.find(k => /unit|cn|lambung|equipment/i.test(k));
+                    const picKey = keys.find(k => /pic|operator|driver|created\s*by|user/i.test(k));
+                    const openKey = keys.find(k => /open|event|start|breakdown/i.test(k));
+                    const entryKey = keys.find(k => /entry|input|created|time\s*entry/i.test(k));
+
+                    const unit = unitKey && rowObj[unitKey] ? String(rowObj[unitKey]).trim() : "-";
+                    const pic = picKey && rowObj[picKey] ? String(rowObj[picKey]).trim() : "Unknown PIC";
+
+                    if (openKey && entryKey && (rowObj[openKey] !== "" || rowObj[entryKey] !== "")) {
+                        const openTime = new Date(rowObj[openKey]);
+                        const entryTime = new Date(rowObj[entryKey]);
+
+                        if (!isNaN(openTime) && !isNaN(entryTime)) {
+                            const diffMinutes = (entryTime - openTime) / (1000 * 60);
+                            const isLambat = diffMinutes > 60;
+
+                            if (isLambat) picLambatCount[pic] = (picLambatCount[pic] || 0) + 1;
+
+                            inputData.push({ unit, pic, openTime, entryTime, diffMinutes, isLambat });
+                        }
+                    }
+                });
+
+                renderInputModule(inputData, picLambatCount);
+                document.getElementById('mainDashboard').classList.remove('hidden');
+                switchTab('input');
+            });
+        }
+
+        // ================= RENDER MODUL PRODUCTIVITY =================
         function renderProdModule(data, picSalahCount) {
             const total = data.length;
             const salah = data.filter(d => d.isSalah).length;
@@ -311,7 +370,6 @@
             document.getElementById('prodSalah').innerText = salah;
             document.getElementById('prodValid').innerText = valid;
 
-            // Render Table
             let html = "";
             data.forEach((d, idx) => {
                 html += `
@@ -327,26 +385,23 @@
                         <td class="p-3 font-mono">${d.hmVal}</td>
                         <td class="p-3 font-mono">${d.ewhVal}</td>
                         <td class="p-3 font-bold ${d.isSalah ? 'text-red-600' : 'text-slate-500'}">${d.isSalah ? '+' + d.diff + ' Jam' : '-'}</td>
-                        <td class="p-3 text-slate-500 text-[11px]">${d.isSalah ? 'HM aktual melebih batas EWH' : 'Sesuai batas EWH'}</td>
+                        <td class="p-3 text-slate-500 text-[11px]">${d.isSalah ? 'HM aktual melebihi batas EWH' : 'Sesuai batas EWH'}</td>
                     </tr>
                 `;
             });
-            document.getElementById('tableBodyProd').innerHTML = html || `<tr><td colspan="8" class="p-5 text-center text-slate-400">Tidak ada data productivity di file ini.</td></tr>`;
+            document.getElementById('tableBodyProd').innerHTML = html || `<tr><td colspan="8" class="p-5 text-center text-slate-400">Tidak ada data.</td></tr>`;
 
-            // Render Chart
             const sortedPIC = Object.entries(picSalahCount).sort((a,b) => b[1] - a[1]).slice(0, 5);
             const ctx = document.getElementById('chartProdPIC').getContext('2d');
             if (chartProdPICObj) chartProdPICObj.destroy();
             chartProdPICObj = new Chart(ctx, {
                 type: 'bar',
-                data: {
-                    labels: sortedPIC.map(x => x[0]),
-                    datasets: [{ label: 'Jumlah Input SALAH', data: sortedPIC.map(x => x[1]), backgroundColor: '#dc2626' }]
-                },
+                data: { labels: sortedPIC.map(x => x[0]), datasets: [{ label: 'Jumlah Input SALAH', data: sortedPIC.map(x => x[1]), backgroundColor: '#dc2626' }] },
                 options: { responsive: true, maintainAspectRatio: false }
             });
         }
 
+        // ================= RENDER MODUL INPUT TIME =================
         function renderInputModule(data, picLambatCount) {
             const total = data.length;
             const lambat = data.filter(d => d.isLambat).length;
@@ -356,7 +411,6 @@
             document.getElementById('inputLambat').innerText = lambat;
             document.getElementById('inputOnTime').innerText = onTime;
 
-            // Render Table
             let html = "";
             data.forEach((d, idx) => {
                 const openStr = d.openTime.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
@@ -380,32 +434,28 @@
                     </tr>
                 `;
             });
-            document.getElementById('tableBodyInput').innerHTML = html || `<tr><td colspan="8" class="p-5 text-center text-slate-400">Tidak ada data input time di file ini.</td></tr>`;
+            document.getElementById('tableBodyInput').innerHTML = html || `<tr><td colspan="8" class="p-5 text-center text-slate-400">Tidak ada data.</td></tr>`;
 
-            // Render Chart Ratio
             const ctxRatio = document.getElementById('chartInputRatio').getContext('2d');
             if (chartInputRatioObj) chartInputRatioObj.destroy();
             chartInputRatioObj = new Chart(ctxRatio, {
                 type: 'doughnut',
-                data: {
-                    labels: ['On-Time (≤ 1 Jam)', 'Lambat (> 1 Jam)'],
-                    datasets: [{ data: [onTime, lambat], backgroundColor: ['#10b981', '#f59e0b'] }]
-                },
+                data: { labels: ['On-Time (≤ 1 Jam)', 'Lambat (> 1 Jam)'], datasets: [{ data: [onTime, lambat], backgroundColor: ['#10b981', '#f59e0b'] }] },
                 options: { responsive: true, maintainAspectRatio: false }
             });
 
-            // Render Chart PIC Lambat
             const sortedPIC = Object.entries(picLambatCount).sort((a,b) => b[1] - a[1]).slice(0, 5);
             const ctxPIC = document.getElementById('chartInputPIC').getContext('2d');
             if (chartInputPICObj) chartInputPICObj.destroy();
             chartInputPICObj = new Chart(ctxPIC, {
                 type: 'bar',
-                data: {
-                    labels: sortedPIC.map(x => x[0]),
-                    datasets: [{ label: 'Jumlah Input LAMBAT', data: sortedPIC.map(x => x[1]), backgroundColor: '#f59e0b' }]
-                },
+                data: { labels: sortedPIC.map(x => x[0]), datasets: [{ label: 'Jumlah Input LAMBAT', data: sortedPIC.map(x => x[1]), backgroundColor: '#f59e0b' }] },
                 options: { responsive: true, maintainAspectRatio: false }
             });
+        }
+
+        function resetAll() {
+            location.reload();
         }
     </script>
 </body>
