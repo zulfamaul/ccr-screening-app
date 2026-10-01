@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CCR Screening Tool - PT Bima Nusa Internasional</title>
+    <title>CCR Screening & Analytics Tool - PT Bima Nusa Internasional</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- SheetJS untuk Membaca Excel di Browser -->
+    <!-- SheetJS untuk Membaca Excel -->
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <!-- Chart.js untuk Grafik -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans min-h-screen p-4 md:p-6">
 
@@ -17,10 +19,11 @@
             <div class="flex items-center space-x-3">
                 <img src="./logo.png" alt="BNI Logo" class="h-10 w-auto object-contain bg-white/10 p-1 rounded" onerror="this.onerror=null; this.src='logo.PNG';">
                 <div>
-                    <h1 class="text-xl font-bold tracking-wide">CCR DATA SCREENING TOOL</h1>
-                    <p class="text-xs text-slate-400">Pemeriksaan Otomatis Input HM/EWH & Keterlambatan Tim CCR</p>
+                    <h1 class="text-xl font-bold tracking-wide">CCR DATA SCREENING & ANALYTICS</h1>
+                    <p class="text-xs text-slate-400">Modul Terpisah: Summary Productivity & Input Time Latency</p>
                 </div>
             </div>
+            <span id="fileNameBadge" class="text-xs bg-slate-800 border border-slate-700 text-slate-300 px-3 py-1.5 rounded-lg font-mono hidden"></span>
         </div>
     </div>
 
@@ -36,197 +39,373 @@
         </div>
     </div>
 
-    <!-- Ringkasan KPI Screening -->
-    <div id="kpiSection" class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6 hidden">
-        <div class="bg-white p-4 rounded-xl shadow border border-slate-200">
-            <p class="text-xs font-bold text-slate-500 uppercase">Total Data Diperiksa</p>
-            <p id="totalRecords" class="text-2xl font-black text-slate-900 mt-1">0</p>
+    <!-- Section Hasil & Tab Navigasi (Sembunyi secara default) -->
+    <div id="mainDashboard" class="max-w-7xl mx-auto hidden">
+        
+        <!-- Tab Buttons -->
+        <div class="flex border-b border-slate-300 mb-6 bg-white rounded-t-xl overflow-hidden shadow-sm">
+            <button id="btnTabProd" onclick="switchTab('prod')" class="flex-1 py-3.5 px-4 text-center font-bold text-sm border-b-2 border-red-600 text-red-600 bg-red-50/50 transition">
+                📊 Summary Productivity (HM vs EWH)
+            </button>
+            <button id="btnTabInput" onclick="switchTab('input')" class="flex-1 py-3.5 px-4 text-center font-bold text-sm text-slate-500 border-b-2 border-transparent hover:text-slate-800 transition">
+                ⏱️ Input Time Latency (Keterlambatan Input)
+            </button>
         </div>
-        <div class="bg-white p-4 rounded-xl shadow border border-slate-200">
-            <p class="text-xs font-bold text-slate-500 uppercase">Input SALAH (HM > EWH)</p>
-            <p id="totalSalah" class="text-2xl font-black text-red-600 mt-1">0</p>
-        </div>
-        <div class="bg-white p-4 rounded-xl shadow border border-slate-200">
-            <p class="text-xs font-bold text-slate-500 uppercase">Input LAMBAT (> 1 Jam)</p>
-            <p id="totalLambat" class="text-2xl font-black text-amber-600 mt-1">0</p>
-        </div>
-        <div class="bg-white p-4 rounded-xl shadow border border-slate-200">
-            <p class="text-xs font-bold text-slate-500 uppercase">Akurasi & On-Time</p>
-            <p id="totalValid" class="text-2xl font-black text-emerald-600 mt-1">0</p>
-        </div>
-    </div>
 
-    <!-- Tabel Hasil Screening -->
-    <div id="resultSection" class="max-w-7xl mx-auto bg-white rounded-xl shadow border border-slate-200 overflow-hidden hidden">
-        <div class="p-4 bg-slate-50 border-b border-slate-200 font-bold text-xs text-slate-700 uppercase tracking-wider flex justify-between items-center">
-            <span>Hasil Anomali Data & Kinerja CCR</span>
-            <span id="fileNameBadge" class="text-xs bg-slate-200 text-slate-700 px-2 py-1 rounded font-mono"></span>
+        <!-- ================= MODUL 1: SUMMARY PRODUCTIVITY ================= -->
+        <div id="modulProd" class="space-y-6">
+            <!-- KPI Cards Productivity -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="bg-white p-4 rounded-xl shadow border border-slate-200">
+                    <p class="text-xs font-bold text-slate-500 uppercase">Total Baris Productivity</p>
+                    <p id="prodTotal" class="text-2xl font-black text-slate-900 mt-1">0</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow border border-slate-200 border-l-4 border-l-red-600">
+                    <p class="text-xs font-bold text-slate-500 uppercase">Input SALAH (HM > EWH)</p>
+                    <p id="prodSalah" class="text-2xl font-black text-red-600 mt-1">0</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow border border-slate-200 border-l-4 border-l-emerald-500">
+                    <p class="text-xs font-bold text-slate-500 uppercase">Input VALID (HM ≤ EWH)</p>
+                    <p id="prodValid" class="text-2xl font-black text-emerald-600 mt-1">0</p>
+                </div>
+            </div>
+
+            <!-- Grafik Productivity -->
+            <div class="bg-white p-5 rounded-xl shadow border border-slate-200">
+                <h3 class="text-sm font-bold text-slate-800 uppercase mb-4 border-b pb-2">Grafik Top 5 PIC / Operator dengan Input SALAH</h3>
+                <div class="h-64">
+                    <canvas id="chartProdPIC"></canvas>
+                </div>
+            </div>
+
+            <!-- Tabel Detail Productivity -->
+            <div class="bg-white rounded-xl shadow border border-slate-200 overflow-hidden">
+                <div class="p-4 bg-slate-50 border-b border-slate-200 font-bold text-xs text-slate-700 uppercase">
+                    Rincian Temuan Anomali HM vs EWH
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-900 text-white uppercase font-semibold text-[11px]">
+                            <tr>
+                                <th class="p-3">No</th>
+                                <th class="p-3">No. Lambung / Unit</th>
+                                <th class="p-3">PIC / Operator</th>
+                                <th class="p-3">Status HM</th>
+                                <th class="p-3">HM Actual</th>
+                                <th class="p-3">EWH</th>
+                                <th class="p-3">Selisih HM</th>
+                                <th class="p-3">Keterangan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBodyProd" class="divide-y divide-slate-200"></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        <div class="overflow-x-auto">
-            <table class="w-full text-left text-xs">
-                <thead class="bg-slate-900 text-white uppercase font-semibold text-[11px]">
-                    <tr>
-                        <th class="p-3">No</th>
-                        <th class="p-3">No. Lambung / Unit</th>
-                        <th class="p-3">PIC / Operator</th>
-                        <th class="p-3">Kategori Temuan</th>
-                        <th class="p-3">Nilai HM / Start</th>
-                        <th class="p-3">Nilai EWH / Entry</th>
-                        <th class="p-3">Selisih / Durasi</th>
-                        <th class="p-3">Keterangan Tambahan</th>
-                    </tr>
-                </thead>
-                <tbody id="resultTableBody" class="divide-y divide-slate-200">
-                </tbody>
-            </table>
+
+        <!-- ================= MODUL 2: INPUT TIME ================= -->
+        <div id="modulInput" class="space-y-6 hidden">
+            <!-- KPI Cards Input Time -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="bg-white p-4 rounded-xl shadow border border-slate-200">
+                    <p class="text-xs font-bold text-slate-500 uppercase">Total Record Input Time</p>
+                    <p id="inputTotal" class="text-2xl font-black text-slate-900 mt-1">0</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow border border-slate-200 border-l-4 border-l-amber-500">
+                    <p class="text-xs font-bold text-slate-500 uppercase">Input LAMBAT (> 1 Jam)</p>
+                    <p id="inputLambat" class="text-2xl font-black text-amber-600 mt-1">0</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl shadow border border-slate-200 border-l-4 border-l-emerald-500">
+                    <p class="text-xs font-bold text-slate-500 uppercase">Input ON-TIME (≤ 1 Jam)</p>
+                    <p id="inputOnTime" class="text-2xl font-black text-emerald-600 mt-1">0</p>
+                </div>
+            </div>
+
+            <!-- Grafik Input Time -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="bg-white p-5 rounded-xl shadow border border-slate-200">
+                    <h3 class="text-sm font-bold text-slate-800 uppercase mb-4 border-b pb-2">Persentase Ketepatan Waktu Input</h3>
+                    <div class="h-56 flex justify-center">
+                        <canvas id="chartInputRatio"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white p-5 rounded-xl shadow border border-slate-200">
+                    <h3 class="text-sm font-bold text-slate-800 uppercase mb-4 border-b pb-2">Top 5 PIC Sering LAMBAT Input</h3>
+                    <div class="h-56">
+                        <canvas id="chartInputPIC"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabel Detail Input Time -->
+            <div class="bg-white rounded-xl shadow border border-slate-200 overflow-hidden">
+                <div class="p-4 bg-slate-50 border-b border-slate-200 font-bold text-xs text-slate-700 uppercase">
+                    Rincian Keterlambatan Input Time
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs">
+                        <thead class="bg-slate-900 text-white uppercase font-semibold text-[11px]">
+                            <tr>
+                                <th class="p-3">No</th>
+                                <th class="p-3">No. Lambung / Unit</th>
+                                <th class="p-3">PIC Input</th>
+                                <th class="p-3">Status Input</th>
+                                <th class="p-3">Open Case Time</th>
+                                <th class="p-3">Entry Time</th>
+                                <th class="p-3">Durasi Input</th>
+                                <th class="p-3">Keterangan</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBodyInput" class="divide-y divide-slate-200"></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
+
     </div>
 
     <script>
         const dropZone = document.getElementById('dropZone');
         const fileInput = document.getElementById('fileInput');
+        let chartProdPICObj = null;
+        let chartInputRatioObj = null;
+        let chartInputPICObj = null;
 
         dropZone.addEventListener('click', () => fileInput.click());
-
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.classList.add('bg-slate-100');
-        });
-
+        dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('bg-slate-100'); });
         dropZone.addEventListener('dragleave', () => dropZone.classList.remove('bg-slate-100'));
-
         dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
             dropZone.classList.remove('bg-slate-100');
-            if (e.dataTransfer.files.length) {
-                handleFile(e.dataTransfer.files[0]);
-            }
+            if (e.dataTransfer.files.length) handleFile(e.dataTransfer.files[0]);
+        });
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length) handleFile(e.target.files[0]);
         });
 
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length) {
-                handleFile(e.target.files[0]);
+        function switchTab(tab) {
+            const btnProd = document.getElementById('btnTabProd');
+            const btnInput = document.getElementById('btnTabInput');
+            const modulProd = document.getElementById('modulProd');
+            const modulInput = document.getElementById('modulInput');
+
+            if (tab === 'prod') {
+                modulProd.classList.remove('hidden');
+                modulInput.classList.add('hidden');
+                btnProd.className = "flex-1 py-3.5 px-4 text-center font-bold text-sm border-b-2 border-red-600 text-red-600 bg-red-50/50 transition";
+                btnInput.className = "flex-1 py-3.5 px-4 text-center font-bold text-sm text-slate-500 border-b-2 border-transparent hover:text-slate-800 transition";
+            } else {
+                modulProd.classList.add('hidden');
+                modulInput.classList.remove('hidden');
+                btnInput.className = "flex-1 py-3.5 px-4 text-center font-bold text-sm border-b-2 border-amber-600 text-amber-600 bg-amber-50/50 transition";
+                btnProd.className = "flex-1 py-3.5 px-4 text-center font-bold text-sm text-slate-500 border-b-2 border-transparent hover:text-slate-800 transition";
             }
-        });
+        }
 
         function handleFile(file) {
-            document.getElementById('fileNameBadge').innerText = file.name;
-            const reader = new FileReader();
+            const badge = document.getElementById('fileNameBadge');
+            badge.innerText = file.name;
+            badge.classList.remove('hidden');
 
+            const reader = new FileReader();
             reader.onload = function(e) {
                 const data = new Uint8Array(e.target.result);
                 const workbook = XLSX.read(data, { type: 'array', cellDates: true });
-                
-                const firstSheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[firstSheetName];
-                const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                const rawRows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: "" });
 
-                processData(jsonData);
+                processData(rawRows);
             };
-
             reader.readAsArrayBuffer(file);
         }
 
-        function processData(data) {
-            if (!data.length) {
-                alert("File kosong atau format tidak terbaca!");
+        function processData(rows) {
+            if (!rows.length) return;
+
+            // Cari Header
+            let headerIdx = -1;
+            for (let i = 0; i < Math.min(rows.length, 15); i++) {
+                const rowStr = rows[i].map(c => String(c).toLowerCase().trim()).join(' ');
+                if (rowStr.includes('unit') || rowStr.includes('cn') || rowStr.includes('hm') || rowStr.includes('open') || rowStr.includes('entry')) {
+                    headerIdx = i;
+                    break;
+                }
+            }
+
+            if (headerIdx === -1) {
+                alert("Header kolom tidak terdeteksi secara otomatis!");
                 return;
             }
 
-            let countSalah = 0;
-            let countLambat = 0;
-            let countValid = 0;
-            let resultsHTML = "";
+            const headers = rows[headerIdx].map(h => String(h).trim());
+            const dataRows = rows.slice(headerIdx + 1);
 
-            data.forEach((row, index) => {
-                // Mencari nama kolom secara fleksibel (case-insensitive)
-                const keys = Object.keys(row);
-                
-                const unitKey = keys.find(k => /lambung|unit|cn/i.test(k));
-                const picKey = keys.find(k => /pic|operator|created|user/i.test(k));
-                const hmKey = keys.find(k => /^hm$|hm actual|hm total/i.test(k));
-                const ewhKey = keys.find(k => /ewh|estimated/i.test(k));
-                
-                const openKey = keys.find(k => /open|event|start/i.test(k));
-                const entryKey = keys.find(k => /entry|input|created/i.test(k));
+            // Variabel Prod & Input
+            let prodData = [], inputData = [];
+            let picSalahCount = {}, picLambatCount = {};
 
-                const unit = row[unitKey] || "-";
-                const pic = row[picKey] || "-";
+            dataRows.forEach((row) => {
+                let rowObj = {};
+                headers.forEach((h, idx) => { if (h) rowObj[h] = row[idx] !== undefined ? row[idx] : ""; });
 
-                let isSalah = false;
-                let isLambat = false;
-                let statusBadge = "";
-                let val1 = "-", val2 = "-", selisih = "-", ket = "-";
+                const keys = Object.keys(rowObj);
+                const unitKey = keys.find(k => /unit|cn|lambung|equipment/i.test(k));
+                const picKey = keys.find(k => /pic|operator|driver|created\s*by|user/i.test(k));
+                const hmKey = keys.find(k => /hm\s*actual|hm\s*total|^hm$|act\s*hm/i.test(k));
+                const ewhKey = keys.find(k => /ewh|estimated|est\s*hm/i.test(k));
+                const openKey = keys.find(k => /open|event|start|breakdown/i.test(k));
+                const entryKey = keys.find(k => /entry|input|created|time\s*entry/i.test(k));
 
-                // 1. Cek Kategori SALAH (HM vs EWH)
-                if (hmKey && ewhKey) {
-                    const hmVal = parseFloat(row[hmKey]) || 0;
-                    const ewhVal = parseFloat(row[ewhKey]) || 0;
-                    val1 = hmVal;
-                    val2 = ewhVal;
+                const unit = unitKey && rowObj[unitKey] ? String(rowObj[unitKey]).trim() : "-";
+                const pic = picKey && rowObj[picKey] ? String(rowObj[picKey]).trim() : "Unknown PIC";
 
-                    if (hmVal > ewhVal && ewhVal > 0) {
-                        isSalah = true;
-                        countSalah++;
-                        const diff = (hmVal - ewhVal).toFixed(2);
-                        selisih = `+${diff} Jam`;
-                        statusBadge = `<span class="bg-red-100 text-red-700 px-2 py-0.5 rounded font-bold">SALAH (HM > EWH)</span>`;
-                        ket = `HM (${hmVal}) melebihi EWH (${ewhVal})`;
-                    }
+                // Deteksi Data Productivity (HM & EWH)
+                if (hmKey && ewhKey && (rowObj[hmKey] !== "" || rowObj[ewhKey] !== "")) {
+                    const hmVal = parseFloat(rowObj[hmKey]) || 0;
+                    const ewhVal = parseFloat(rowObj[ewhKey]) || 0;
+                    const isSalah = hmVal > ewhVal && ewhVal > 0;
+
+                    if (isSalah) picSalahCount[pic] = (picSalahCount[pic] || 0) + 1;
+
+                    prodData.push({
+                        unit, pic, hmVal, ewhVal, isSalah,
+                        diff: isSalah ? (hmVal - ewhVal).toFixed(2) : 0
+                    });
                 }
 
-                // 2. Cek Kategori LAMBAT (Durasi Input Time)
-                if (openKey && entryKey && !isSalah) {
-                    const openTime = new Date(row[openKey]);
-                    const entryTime = new Date(row[entryKey]);
+                // Deteksi Data Input Time (Open & Entry)
+                if (openKey && entryKey && (rowObj[openKey] !== "" || rowObj[entryKey] !== "")) {
+                    const openTime = new Date(rowObj[openKey]);
+                    const entryTime = new Date(rowObj[entryKey]);
 
                     if (!isNaN(openTime) && !isNaN(entryTime)) {
-                        val1 = openTime.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
-                        val2 = entryTime.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
-
                         const diffMinutes = (entryTime - openTime) / (1000 * 60);
-                        const diffHours = (diffMinutes / 60).toFixed(2);
+                        const isLambat = diffMinutes > 60;
 
-                        if (diffMinutes > 60) {
-                            isLambat = true;
-                            countLambat++;
-                            selisih = `${diffHours} Jam`;
-                            statusBadge = `<span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded font-bold">LAMBAT (> 1 Jam)</span>`;
-                            ket = `Input butuh waktu ${diffMinutes.toFixed(0)} menit dari open case`;
-                        }
+                        if (isLambat) picLambatCount[pic] = (picLambatCount[pic] || 0) + 1;
+
+                        inputData.push({
+                            unit, pic, openTime, entryTime, diffMinutes, isLambat
+                        });
                     }
                 }
+            });
 
-                if (!isSalah && !isLambat) {
-                    countValid++;
-                    statusBadge = `<span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded font-bold">VALID / ON-TIME</span>`;
-                }
+            // Render Hasil
+            renderProdModule(prodData, picSalahCount);
+            renderInputModule(inputData, picLambatCount);
 
-                resultsHTML += `
-                    <tr class="${isSalah ? 'bg-red-50/50' : (isLambat ? 'bg-amber-50/50' : 'hover:bg-slate-50')} transition">
-                        <td class="p-3 text-slate-500 font-mono">${index + 1}</td>
-                        <td class="p-3 font-bold text-slate-900">${unit}</td>
-                        <td class="p-3 font-medium text-slate-800">${pic}</td>
-                        <td class="p-3">${statusBadge}</td>
-                        <td class="p-3 font-mono">${val1}</td>
-                        <td class="p-3 font-mono">${val2}</td>
-                        <td class="p-3 font-bold ${isSalah ? 'text-red-600' : (isLambat ? 'text-amber-600' : 'text-slate-600')}">${selisih}</td>
-                        <td class="p-3 text-slate-500">${ket}</td>
+            document.getElementById('mainDashboard').classList.remove('hidden');
+
+            // Switch otomatis ke modul yang berisi data
+            if (prodData.length > 0) switchTab('prod');
+            else if (inputData.length > 0) switchTab('input');
+        }
+
+        function renderProdModule(data, picSalahCount) {
+            const total = data.length;
+            const salah = data.filter(d => d.isSalah).length;
+            const valid = total - salah;
+
+            document.getElementById('prodTotal').innerText = total;
+            document.getElementById('prodSalah').innerText = salah;
+            document.getElementById('prodValid').innerText = valid;
+
+            // Render Table
+            let html = "";
+            data.forEach((d, idx) => {
+                html += `
+                    <tr class="${d.isSalah ? 'bg-red-50/60 font-medium' : 'hover:bg-slate-50'} transition">
+                        <td class="p-3 text-slate-500 font-mono">${idx + 1}</td>
+                        <td class="p-3 font-bold text-slate-900">${d.unit}</td>
+                        <td class="p-3">${d.pic}</td>
+                        <td class="p-3">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${d.isSalah ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'}">
+                                ${d.isSalah ? 'SALAH (HM > EWH)' : 'VALID'}
+                            </span>
+                        </td>
+                        <td class="p-3 font-mono">${d.hmVal}</td>
+                        <td class="p-3 font-mono">${d.ewhVal}</td>
+                        <td class="p-3 font-bold ${d.isSalah ? 'text-red-600' : 'text-slate-500'}">${d.isSalah ? '+' + d.diff + ' Jam' : '-'}</td>
+                        <td class="p-3 text-slate-500 text-[11px]">${d.isSalah ? 'HM aktual melebih batas EWH' : 'Sesuai batas EWH'}</td>
                     </tr>
                 `;
             });
+            document.getElementById('tableBodyProd').innerHTML = html || `<tr><td colspan="8" class="p-5 text-center text-slate-400">Tidak ada data productivity di file ini.</td></tr>`;
 
-            // Update DOM Stats
-            document.getElementById('totalRecords').innerText = data.length;
-            document.getElementById('totalSalah').innerText = countSalah;
-            document.getElementById('totalLambat').innerText = countLambat;
-            document.getElementById('totalValid').innerText = countValid;
+            // Render Chart
+            const sortedPIC = Object.entries(picSalahCount).sort((a,b) => b[1] - a[1]).slice(0, 5);
+            const ctx = document.getElementById('chartProdPIC').getContext('2d');
+            if (chartProdPICObj) chartProdPICObj.destroy();
+            chartProdPICObj = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: sortedPIC.map(x => x[0]),
+                    datasets: [{ label: 'Jumlah Input SALAH', data: sortedPIC.map(x => x[1]), backgroundColor: '#dc2626' }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
 
-            document.getElementById('resultTableBody').innerHTML = resultsHTML;
+        function renderInputModule(data, picLambatCount) {
+            const total = data.length;
+            const lambat = data.filter(d => d.isLambat).length;
+            const onTime = total - lambat;
 
-            // Tampilkan Section
-            document.getElementById('kpiSection').classList.remove('hidden');
-            document.getElementById('resultSection').classList.remove('hidden');
+            document.getElementById('inputTotal').innerText = total;
+            document.getElementById('inputLambat').innerText = lambat;
+            document.getElementById('inputOnTime').innerText = onTime;
+
+            // Render Table
+            let html = "";
+            data.forEach((d, idx) => {
+                const openStr = d.openTime.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+                const entryStr = d.entryTime.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
+                const durasi = (d.diffMinutes / 60).toFixed(2);
+
+                html += `
+                    <tr class="${d.isLambat ? 'bg-amber-50/60 font-medium' : 'hover:bg-slate-50'} transition">
+                        <td class="p-3 text-slate-500 font-mono">${idx + 1}</td>
+                        <td class="p-3 font-bold text-slate-900">${d.unit}</td>
+                        <td class="p-3">${d.pic}</td>
+                        <td class="p-3">
+                            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${d.isLambat ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'}">
+                                ${d.isLambat ? 'LAMBAT (> 1 Jam)' : 'ON-TIME'}
+                            </span>
+                        </td>
+                        <td class="p-3 font-mono">${openStr}</td>
+                        <td class="p-3 font-mono">${entryStr}</td>
+                        <td class="p-3 font-bold ${d.isLambat ? 'text-amber-600' : 'text-slate-500'}">${durasi} Jam (${d.diffMinutes.toFixed(0)}m)</td>
+                        <td class="p-3 text-slate-500 text-[11px]">${d.isLambat ? 'Input melebihi batas 60 menit' : 'Input tepat waktu'}</td>
+                    </tr>
+                `;
+            });
+            document.getElementById('tableBodyInput').innerHTML = html || `<tr><td colspan="8" class="p-5 text-center text-slate-400">Tidak ada data input time di file ini.</td></tr>`;
+
+            // Render Chart Ratio
+            const ctxRatio = document.getElementById('chartInputRatio').getContext('2d');
+            if (chartInputRatioObj) chartInputRatioObj.destroy();
+            chartInputRatioObj = new Chart(ctxRatio, {
+                type: 'doughnut',
+                data: {
+                    labels: ['On-Time (≤ 1 Jam)', 'Lambat (> 1 Jam)'],
+                    datasets: [{ data: [onTime, lambat], backgroundColor: ['#10b981', '#f59e0b'] }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+
+            // Render Chart PIC Lambat
+            const sortedPIC = Object.entries(picLambatCount).sort((a,b) => b[1] - a[1]).slice(0, 5);
+            const ctxPIC = document.getElementById('chartInputPIC').getContext('2d');
+            if (chartInputPICObj) chartInputPICObj.destroy();
+            chartInputPICObj = new Chart(ctxPIC, {
+                type: 'bar',
+                data: {
+                    labels: sortedPIC.map(x => x[0]),
+                    datasets: [{ label: 'Jumlah Input LAMBAT', data: sortedPIC.map(x => x[1]), backgroundColor: '#f59e0b' }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
         }
     </script>
 </body>
