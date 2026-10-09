@@ -11,131 +11,131 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Google Font Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
-        .card-clean {
+        .bni-card {
             background-color: #ffffff;
             border: 1px solid #e2e8f0;
-            border-radius: 0.75rem;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.02);
         }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 min-h-screen p-4 md:p-6">
 
-    <!-- Header / Navbar -->
-    <div class="max-w-7xl mx-auto bg-white rounded-xl p-4 md:p-5 mb-6 shadow-sm border border-slate-200 relative">
-        <!-- Garis Merah Khas BNI di Atas Header -->
-        <div class="absolute top-0 left-0 w-full h-[3px] bg-red-600 rounded-t-xl"></div>
-        
-        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mt-1">
-            <!-- Branding -->
+    <!-- Top Red Border Line -->
+    <div class="fixed top-0 left-0 w-full h-[4px] bg-red-600 z-50"></div>
+
+    <!-- Header / Navbar Minimalis -->
+    <div class="max-w-7xl mx-auto bni-card p-4 md:p-5 mb-6 mt-2">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+            
+            <!-- Branding BNI -->
             <div class="flex items-center space-x-3">
                 <div class="p-1.5 bg-white rounded-lg border border-slate-200">
                     <img src="./logo.png" alt="BNI Logo" class="h-8 w-auto object-contain" onerror="this.onerror=null; this.src='logo.PNG';">
                 </div>
                 <div>
-                    <h1 class="text-base md:text-lg font-bold text-slate-900 tracking-tight">
-                        CCR SCREENING <span class="text-slate-500 font-normal">SYSTEM</span>
+                    <h1 class="text-base font-extrabold tracking-tight text-slate-900">
+                        CCR Screening System
                     </h1>
                     <p class="text-[11px] text-slate-500 font-medium">PT Bima Nusa Internasional</p>
                 </div>
             </div>
 
-            <!-- Upload File Bar -->
+            <!-- Area Upload File -->
             <div class="flex flex-wrap items-center gap-3">
+                
                 <!-- Upload 1: Summary Prod -->
-                <div id="dzProd" class="bg-white hover:bg-slate-50 border border-slate-300 hover:border-red-500 px-3.5 py-2 rounded-lg flex items-center gap-2.5 cursor-pointer transition-all duration-200 group shadow-sm">
+                <div id="dzProd" class="bni-card px-3.5 py-2 flex items-center gap-2.5 cursor-pointer hover:border-slate-400 transition group">
                     <div class="w-2 h-2 rounded-full bg-red-600"></div>
-                    <svg class="w-4 h-4 text-slate-500 group-hover:text-red-600 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                    <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                     <div class="text-left">
-                        <p class="text-[10px] font-bold text-slate-700 uppercase tracking-wider">Summary Prod</p>
-                        <p id="lblProd" class="text-[10px] text-slate-400 font-mono truncate max-w-[110px]">Klik / Drop File</p>
+                        <p class="text-[10px] font-bold text-slate-700">SUMMARY PROD</p>
+                        <p id="lblProd" class="text-[9px] text-slate-500 font-mono truncate max-w-[110px]">Klik / Drop File</p>
                     </div>
                     <input type="file" id="inpProd" accept=".xlsx, .xls" class="hidden">
                 </div>
 
                 <!-- Upload 2: Input Time -->
-                <div id="dzInput" class="bg-white hover:bg-slate-50 border border-slate-300 hover:border-slate-600 px-3.5 py-2 rounded-lg flex items-center gap-2.5 cursor-pointer transition-all duration-200 group shadow-sm">
+                <div id="dzInput" class="bni-card px-3.5 py-2 flex items-center gap-2.5 cursor-pointer hover:border-slate-400 transition group">
                     <div class="w-2 h-2 rounded-full bg-slate-700"></div>
-                    <svg class="w-4 h-4 text-slate-500 group-hover:text-slate-800 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <svg class="w-4 h-4 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     <div class="text-left">
-                        <p class="text-[10px] font-bold text-slate-700 uppercase tracking-wider">Input Time</p>
-                        <p id="lblInput" class="text-[10px] text-slate-400 font-mono truncate max-w-[110px]">Klik / Drop File</p>
+                        <p class="text-[10px] font-bold text-slate-700">INPUT TIME</p>
+                        <p id="lblInput" class="text-[9px] text-slate-500 font-mono truncate max-w-[110px]">Klik / Drop File</p>
                     </div>
                     <input type="file" id="inpInput" accept=".xlsx, .xls" class="hidden">
                 </div>
 
                 <!-- Reset Button -->
-                <button onclick="location.reload()" class="p-2 bg-white hover:bg-slate-100 text-slate-500 hover:text-slate-800 rounded-lg border border-slate-300 transition shadow-sm" title="Reset Data">
+                <button onclick="location.reload()" class="p-2.5 bg-white hover:bg-slate-100 text-slate-600 rounded-xl border border-slate-200 transition" title="Reset Data">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                 </button>
             </div>
+
         </div>
     </div>
 
     <!-- Main Container Dashboard -->
     <div id="mainDashboard" class="max-w-7xl mx-auto space-y-6">
         
-        <!-- Navigation Tabs -->
-        <div class="flex p-1 bg-slate-200/60 rounded-xl border border-slate-300 max-w-md mx-auto mb-6">
-            <button id="btnTabProd" onclick="switchTab('prod')" class="flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all duration-200 bg-white text-slate-900 shadow-sm border border-slate-200">
-                📊 Summary Prod Analytics
+        <!-- Tab Switcher -->
+        <div class="flex p-1 bg-white rounded-xl border border-slate-200 max-w-md mx-auto mb-6">
+            <button id="btnTabProd" onclick="switchTab('prod')" class="flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all duration-200 bg-slate-900 text-white shadow-sm">
+                Summary Prod Analytics
             </button>
-            <button id="btnTabInput" onclick="switchTab('input')" class="flex-1 py-2 px-3 rounded-lg text-xs font-bold text-slate-500 hover:text-slate-900 transition-all duration-200">
-                ⏱️ Input Time Analytics
+            <button id="btnTabInput" onclick="switchTab('input')" class="flex-1 py-2 px-3 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900 transition-all duration-200">
+                Input Time Analytics
             </button>
         </div>
 
         <!-- ================= MODUL 1: SUMMARY PRODUCTIVITY ================= -->
         <div id="modulProd" class="space-y-6">
-            <!-- KPI Cards -->
+            <!-- KPI Cards Clean -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div class="card-clean p-4">
-                    <p class="text-[11px] font-medium text-slate-500">Total Record Examined</p>
-                    <p id="prodTotal" class="text-3xl font-bold text-slate-900 mt-1">0</p>
+                <div class="bni-card p-5">
+                    <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wide">Total Record Examined</p>
+                    <p id="prodTotal" class="text-3xl font-extrabold text-slate-900 mt-2">0</p>
                 </div>
-                <div class="card-clean p-4 border-l-4 border-l-red-600">
-                    <p class="text-[11px] font-medium text-slate-500">Input SALAH (HM > EWH)</p>
-                    <p id="prodSalah" class="text-3xl font-bold text-red-600 mt-1">0</p>
+                <div class="bni-card p-5">
+                    <p class="text-[11px] font-semibold text-red-600 uppercase tracking-wide">Input SALAH (HM > EWH)</p>
+                    <p id="prodSalah" class="text-3xl font-extrabold text-red-600 mt-2">0</p>
                 </div>
-                <div class="card-clean p-4 border-l-4 border-l-emerald-600">
-                    <p class="text-[11px] font-medium text-slate-500">Input VALID (HM ≤ EWH)</p>
-                    <p id="prodValid" class="text-3xl font-bold text-emerald-600 mt-1">0</p>
+                <div class="bni-card p-5">
+                    <p class="text-[11px] font-semibold text-slate-700 uppercase tracking-wide">Input VALID (HM ≤ EWH)</p>
+                    <p id="prodValid" class="text-3xl font-extrabold text-slate-800 mt-2">0</p>
                 </div>
             </div>
 
             <!-- Chart -->
-            <div class="card-clean p-5">
-                <div class="flex items-center justify-between mb-4 pb-2 border-b border-slate-100">
-                    <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Top 5 Error by PIC / Operator</h3>
-                    <span class="text-[10px] text-slate-400">Monitoring Analytics</span>
-                </div>
+            <div class="bni-card p-5">
+                <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-4 border-b border-slate-100 pb-3">Top 5 Error by PIC / Operator</h3>
                 <div class="h-60"><canvas id="chartProdPIC"></canvas></div>
             </div>
 
             <!-- Table -->
-            <div class="card-clean overflow-hidden">
-                <div class="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
-                    <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Rincian Anomali</h3>
-                    <span class="text-[11px] text-slate-400">Control Room Data</span>
+            <div class="bni-card overflow-hidden">
+                <div class="p-4 bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-700 uppercase tracking-wider flex justify-between items-center">
+                    <span>Rincian Anomali</span>
+                    <span class="text-[11px] text-slate-400 font-normal">Monitoring Control HO</span>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs">
                         <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider font-semibold border-b border-slate-200">
                             <tr>
-                                <th class="p-3.5">No</th>
-                                <th class="p-3.5">Unit / CN</th>
-                                <th class="p-3.5">PIC / Operator</th>
-                                <th class="p-3.5">Status</th>
-                                <th class="p-3.5">HM Actual</th>
-                                <th class="p-3.5">EWH</th>
-                                <th class="p-3.5">Selisih</th>
-                                <th class="p-3.5">Keterangan</th>
+                                <th class="p-3">No</th>
+                                <th class="p-3">Unit / CN</th>
+                                <th class="p-3">PIC / Operator</th>
+                                <th class="p-3">Status</th>
+                                <th class="p-3">HM Actual</th>
+                                <th class="p-3">EWH</th>
+                                <th class="p-3">Selisih</th>
+                                <th class="p-3">Keterangan</th>
                             </tr>
                         </thead>
-                        <tbody id="tableBodyProd" class="divide-y divide-slate-200"></tbody>
+                        <tbody id="tableBodyProd" class="divide-y divide-slate-100"></tbody>
                     </table>
                 </div>
             </div>
@@ -143,59 +143,55 @@
 
         <!-- ================= MODUL 2: INPUT TIME ================= -->
         <div id="modulInput" class="space-y-6 hidden">
-            <!-- KPI Cards -->
+            <!-- KPI Cards Clean -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div class="card-clean p-4">
-                    <p class="text-[11px] font-medium text-slate-500">Total Record Input</p>
-                    <p id="inputTotal" class="text-3xl font-bold text-slate-900 mt-1">0</p>
+                <div class="bni-card p-5">
+                    <p class="text-[11px] font-semibold text-slate-500 uppercase tracking-wide">Total Record Input</p>
+                    <p id="inputTotal" class="text-3xl font-extrabold text-slate-900 mt-2">0</p>
                 </div>
-                <div class="card-clean p-4 border-l-4 border-l-amber-500">
-                    <p class="text-[11px] font-medium text-slate-500">Input LAMBAT (> 1 Jam)</p>
-                    <p id="inputLambat" class="text-3xl font-bold text-amber-600 mt-1">0</p>
+                <div class="bni-card p-5">
+                    <p class="text-[11px] font-semibold text-red-600 uppercase tracking-wide">Input LAMBAT (> 1 Jam)</p>
+                    <p id="inputLambat" class="text-3xl font-extrabold text-red-600 mt-2">0</p>
                 </div>
-                <div class="card-clean p-4 border-l-4 border-l-emerald-600">
-                    <p class="text-[11px] font-medium text-slate-500">Input ON-TIME (≤ 1 Jam)</p>
-                    <p id="inputOnTime" class="text-3xl font-bold text-emerald-600 mt-1">0</p>
+                <div class="bni-card p-5">
+                    <p class="text-[11px] font-semibold text-slate-700 uppercase tracking-wide">Input ON-TIME (≤ 1 Jam)</p>
+                    <p id="inputOnTime" class="text-3xl font-extrabold text-slate-800 mt-2">0</p>
                 </div>
             </div>
 
             <!-- Charts -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="card-clean p-5">
-                    <div class="mb-4 pb-2 border-b border-slate-100">
-                        <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Rasio Ketepatan Waktu Input</h3>
-                    </div>
+                <div class="bni-card p-5">
+                    <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-4 border-b border-slate-100 pb-3">Rasio Ketepatan Waktu Input</h3>
                     <div class="h-52 flex justify-center"><canvas id="chartInputRatio"></canvas></div>
                 </div>
-                <div class="card-clean p-5">
-                    <div class="mb-4 pb-2 border-b border-slate-100">
-                        <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Top 5 PIC Delay Input</h3>
-                    </div>
+                <div class="bni-card p-5">
+                    <h3 class="text-xs font-bold text-slate-900 uppercase tracking-wider mb-4 border-b border-slate-100 pb-3">Top 5 PIC Delay Input</h3>
                     <div class="h-52"><canvas id="chartInputPIC"></canvas></div>
                 </div>
             </div>
 
             <!-- Table -->
-            <div class="card-clean overflow-hidden">
-                <div class="p-4 bg-slate-50 border-b border-slate-200 flex justify-between items-center">
-                    <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Rincian Keterlambatan Input Time</h3>
-                    <span class="text-[11px] text-slate-400">Control Room Data</span>
+            <div class="bni-card overflow-hidden">
+                <div class="p-4 bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-700 uppercase tracking-wider flex justify-between items-center">
+                    <span>Rincian Keterlambatan Input Time</span>
+                    <span class="text-[11px] text-slate-400 font-normal">Monitoring Control HO</span>
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs">
                         <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider font-semibold border-b border-slate-200">
                             <tr>
-                                <th class="p-3.5">No</th>
-                                <th class="p-3.5">Unit / CN</th>
-                                <th class="p-3.5">PIC Input</th>
-                                <th class="p-3.5">Status</th>
-                                <th class="p-3.5">Open Time</th>
-                                <th class="p-3.5">Entry Time</th>
-                                <th class="p-3.5">Durasi</th>
-                                <th class="p-3.5">Keterangan</th>
+                                <th class="p-3">No</th>
+                                <th class="p-3">Unit / CN</th>
+                                <th class="p-3">PIC Input</th>
+                                <th class="p-3">Status</th>
+                                <th class="p-3">Open Time</th>
+                                <th class="p-3">Entry Time</th>
+                                <th class="p-3">Durasi</th>
+                                <th class="p-3">Keterangan</th>
                             </tr>
                         </thead>
-                        <tbody id="tableBodyInput" class="divide-y divide-slate-200"></tbody>
+                        <tbody id="tableBodyInput" class="divide-y divide-slate-100"></tbody>
                     </table>
                 </div>
             </div>
@@ -232,12 +228,12 @@
 
             if (tab === 'prod') {
                 mProd.classList.remove('hidden'); mInput.classList.add('hidden');
-                btnProd.className = "flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all duration-200 bg-white text-slate-900 shadow-sm border border-slate-200";
-                btnInput.className = "flex-1 py-2 px-3 rounded-lg text-xs font-bold text-slate-500 hover:text-slate-900 transition-all duration-200";
+                btnProd.className = "flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all duration-200 bg-slate-900 text-white shadow-sm";
+                btnInput.className = "flex-1 py-2 px-3 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900 transition-all duration-200";
             } else {
                 mProd.classList.add('hidden'); mInput.classList.remove('hidden');
-                btnInput.className = "flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all duration-200 bg-white text-slate-900 shadow-sm border border-slate-200";
-                btnProd.className = "flex-1 py-2 px-3 rounded-lg text-xs font-bold text-slate-500 hover:text-slate-900 transition-all duration-200";
+                btnInput.className = "flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all duration-200 bg-slate-900 text-white shadow-sm";
+                btnProd.className = "flex-1 py-2 px-3 rounded-lg text-xs font-bold text-slate-600 hover:text-slate-900 transition-all duration-200";
             }
         }
 
@@ -370,23 +366,23 @@
             let html = "";
             data.forEach((d, idx) => {
                 html += `
-                    <tr class="${d.isSalah ? 'bg-red-50/70 font-medium' : 'hover:bg-slate-50 text-slate-700'} transition">
-                        <td class="p-3.5 font-mono text-slate-400">${idx + 1}</td>
-                        <td class="p-3.5 font-bold text-slate-900">${d.unit}</td>
-                        <td class="p-3.5 text-slate-600">${d.pic}</td>
-                        <td class="p-3.5">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${d.isSalah ? 'bg-red-100 text-red-700' : 'bg-emerald-100 text-emerald-700'}">
+                    <tr class="${d.isSalah ? 'bg-red-50 text-red-900 font-medium' : 'hover:bg-slate-50 text-slate-700'} transition">
+                        <td class="p-3 font-mono text-slate-400">${idx + 1}</td>
+                        <td class="p-3 font-bold text-slate-900">${d.unit}</td>
+                        <td class="p-3">${d.pic}</td>
+                        <td class="p-3">
+                            <span class="px-2 py-0.5 rounded-md text-[9px] font-bold uppercase ${d.isSalah ? 'bg-red-100 text-red-700 border border-red-200' : 'bg-slate-100 text-slate-700 border border-slate-200'}">
                                 ${d.isSalah ? 'SALAH (HM > EWH)' : 'VALID'}
                             </span>
                         </td>
-                        <td class="p-3.5 font-mono text-slate-700">${d.hmVal}</td>
-                        <td class="p-3.5 font-mono text-slate-700">${d.ewhVal}</td>
-                        <td class="p-3.5 font-bold ${d.isSalah ? 'text-red-600' : 'text-slate-400'}">${d.isSalah ? '+' + d.diff + ' Jam' : '-'}</td>
-                        <td class="p-3.5 text-slate-500 text-[11px]">${d.isSalah ? 'HM melebihi batas EWH' : 'Normal'}</td>
+                        <td class="p-3 font-mono">${d.hmVal}</td>
+                        <td class="p-3 font-mono">${d.ewhVal}</td>
+                        <td class="p-3 font-bold ${d.isSalah ? 'text-red-600' : 'text-slate-400'}">${d.isSalah ? '+' + d.diff + ' Jam' : '-'}</td>
+                        <td class="p-3 text-slate-500 text-[11px]">${d.isSalah ? 'HM melebihi batas EWH' : 'Normal'}</td>
                     </tr>
                 `;
             });
-            document.getElementById('tableBodyProd').innerHTML = html || `<tr><td colspan="8" class="p-6 text-center text-slate-400">Tidak ada data transaksi yang sesuai filter.</td></tr>`;
+            document.getElementById('tableBodyProd').innerHTML = html || `<tr><td colspan="8" class="p-6 text-center text-slate-400">Tidak ada data ditemukan.</td></tr>`;
 
             const sortedPIC = Object.entries(picSalahCount).sort((a,b) => b[1] - a[1]).slice(0, 5);
             const ctx = document.getElementById('chartProdPIC').getContext('2d');
@@ -397,7 +393,7 @@
                     labels: sortedPIC.map(x => x[0]),
                     datasets: [{ label: 'Total Input SALAH', data: sortedPIC.map(x => x[1]), backgroundColor: '#dc2626', borderRadius: 6 }]
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#475569', font: { family: 'Inter' } } } }, scales: { x: { ticks: { color: '#64748b' }, grid: { display: false } }, y: { ticks: { color: '#64748b' }, grid: { color: '#f1f5f9' } } } }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#334155' } } }, scales: { x: { ticks: { color: '#64748b' } }, y: { ticks: { color: '#64748b' } } } }
             });
         }
 
@@ -417,30 +413,30 @@
                 const durasi = (d.diffMinutes / 60).toFixed(2);
 
                 html += `
-                    <tr class="${d.isLambat ? 'bg-amber-50/70 font-medium' : 'hover:bg-slate-50 text-slate-700'} transition">
-                        <td class="p-3.5 font-mono text-slate-400">${idx + 1}</td>
-                        <td class="p-3.5 font-bold text-slate-900">${d.unit}</td>
-                        <td class="p-3.5 text-slate-600">${d.pic}</td>
-                        <td class="p-3.5">
-                            <span class="px-2 py-0.5 rounded text-[10px] font-bold ${d.isLambat ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-700'}">
+                    <tr class="${d.isLambat ? 'bg-red-50 text-red-900 font-medium' : 'hover:bg-slate-50 text-slate-700'} transition">
+                        <td class="p-3 font-mono text-slate-400">${idx + 1}</td>
+                        <td class="p-3 font-bold text-slate-900">${d.unit}</td>
+                        <td class="p-3">${d.pic}</td>
+                        <td class="p-3">
+                            <span class="px-2 py-0.5 rounded-md text-[9px] font-bold uppercase ${d.isLambat ? 'bg-red-100 text-red-700 border border-red-200' : 'bg-slate-100 text-slate-700 border border-slate-200'}">
                                 ${d.isLambat ? 'LAMBAT (> 1 Jam)' : 'ON-TIME'}
                             </span>
                         </td>
-                        <td class="p-3.5 font-mono text-slate-700">${openStr}</td>
-                        <td class="p-3.5 font-mono text-slate-700">${entryStr}</td>
-                        <td class="p-3.5 font-bold ${d.isLambat ? 'text-amber-600' : 'text-slate-400'}">${durasi} Jam (${d.diffMinutes.toFixed(0)}m)</td>
-                        <td class="p-3.5 text-slate-500 text-[11px]">${d.isLambat ? 'Terlambat input > 60 menit' : 'Sesuai SLA'}</td>
+                        <td class="p-3 font-mono">${openStr}</td>
+                        <td class="p-3 font-mono">${entryStr}</td>
+                        <td class="p-3 font-bold ${d.isLambat ? 'text-red-600' : 'text-slate-400'}">${durasi} Jam (${d.diffMinutes.toFixed(0)}m)</td>
+                        <td class="p-3 text-slate-500 text-[11px]">${d.isLambat ? 'Terlambat input > 60 menit' : 'Sesuai SLA'}</td>
                     </tr>
                 `;
             });
-            document.getElementById('tableBodyInput').innerHTML = html || `<tr><td colspan="8" class="p-6 text-center text-slate-400">Tidak ada data transaksi yang sesuai filter.</td></tr>`;
+            document.getElementById('tableBodyInput').innerHTML = html || `<tr><td colspan="8" class="p-6 text-center text-slate-400">Tidak ada data ditemukan.</td></tr>`;
 
             const ctxRatio = document.getElementById('chartInputRatio').getContext('2d');
             if (chartInputRatioObj) chartInputRatioObj.destroy();
             chartInputRatioObj = new Chart(ctxRatio, {
                 type: 'doughnut',
-                data: { labels: ['On-Time', 'Lambat'], datasets: [{ data: [onTime, lambat], backgroundColor: ['#10b981', '#f59e0b'] }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#475569', font: { family: 'Inter' } } } } }
+                data: { labels: ['On-Time', 'Lambat'], datasets: [{ data: [onTime, lambat], backgroundColor: ['#334155', '#dc2626'] }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#334155' } } } }
             });
 
             const sortedPIC = Object.entries(picLambatCount).sort((a,b) => b[1] - a[1]).slice(0, 5);
@@ -448,8 +444,8 @@
             if (chartInputPICObj) chartInputPICObj.destroy();
             chartInputPICObj = new Chart(ctxPIC, {
                 type: 'bar',
-                data: { labels: sortedPIC.map(x => x[0]), datasets: [{ label: 'Total Input LAMBAT', data: sortedPIC.map(x => x[1]), backgroundColor: '#f59e0b', borderRadius: 6 }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#475569', font: { family: 'Inter' } } } }, scales: { x: { ticks: { color: '#64748b' }, grid: { display: false } }, y: { ticks: { color: '#64748b' }, grid: { color: '#f1f5f9' } } } }
+                data: { labels: sortedPIC.map(x => x[0]), datasets: [{ label: 'Total Input LAMBAT', data: sortedPIC.map(x => x[1]), backgroundColor: '#dc2626', borderRadius: 6 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#334155' } } }, scales: { x: { ticks: { color: '#64748b' } }, y: { ticks: { color: '#64748b' } } } }
             });
         }
     </script>
