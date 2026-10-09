@@ -3,448 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CCR Screening & Analytics Tool - PT Bima Nusa Internasional</title>
+    <title>Fuel Monitoring System - PT Bima Nusa Internasional</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- SheetJS untuk Membaca Excel -->
-    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Google Font Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .glass-card {
-            background: #ffffff;
-            border: 1px solid #1e3a8a;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .card-custom {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
         }
-        .glow-red:hover { box-shadow: 0 0 15px rgba(239, 68, 68, 0.25); }
-        .glow-amber:hover { box-shadow: 0 0 15px rgba(30, 58, 138, 0.25); }
     </style>
 </head>
-<body class="bg-white text-slate-800 min-h-screen p-4 md:p-6">
+<body class="text-slate-700 min-h-screen">
 
-    <!-- Navbar Header Futuristik -->
-    <div class="max-w-7xl mx-auto glass-card rounded-2xl p-4 md:p-5 mb-6 shadow-md relative overflow-hidden border-2 border-blue-900">
-        <div class="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-red-600 via-blue-900 to-red-600"></div>
-        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            
-            <!-- Branding -->
+    <!-- Header Navbar -->
+    <header class="bg-white border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+            <!-- Branding Logo & Title -->
             <div class="flex items-center space-x-3">
-                <div class="p-2 bg-slate-50 rounded-xl border border-blue-900 shadow-inner">
+                <div class="p-1 bg-white rounded border border-slate-200 shadow-sm">
                     <img src="./logo.png" alt="BNI Logo" class="h-8 w-auto object-contain" onerror="this.onerror=null; this.src='logo.PNG';">
                 </div>
                 <div>
-                    <h1 class="text-lg font-extrabold tracking-wide text-blue-950">
-                        CCR SCREENING <span class="text-red-600 font-normal"></span>
-                    </h1>
-                    <p class="text-[11px] text-slate-500 tracking-wider uppercase font-semibold">Automated Analytics & Anomaly Detection</p>
+                    <h1 class="text-base font-bold text-slate-800 tracking-tight leading-tight">Fuel Monitoring System</h1>
+                    <p class="text-xs text-slate-400 font-medium">PT Bima Nusa Internasional</p>
                 </div>
             </div>
 
-            <!-- Compact & Aesthetic Upload Bars (Mungil & Presisi) -->
+            <!-- Status Indicator -->
+            <div>
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-200">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Realtime Moni
+                </span>
+            </div>
+        </div>
+        <!-- Red Accent Line -->
+        <div class="h-0.5 bg-red-600 w-full"></div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-5">
+
+        <!-- KPI Summary Cards (4 Columns) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            <!-- Card 1: Total Transaksi -->
+            <div class="card-custom p-5">
+                <p class="text-xs font-medium text-slate-400">Total Transaksi</p>
+                <p id="kpiTotalTrx" class="text-3xl font-extrabold text-slate-900 mt-3">0</p>
+            </div>
+
+            <!-- Card 2: Total Volume Solar -->
+            <div class="card-custom p-5">
+                <p class="text-xs font-medium text-slate-400">Total Volume Solar</p>
+                <p id="kpiVolume" class="text-3xl font-extrabold text-slate-900 mt-3">0 L</p>
+            </div>
+
+            <!-- Card 3: Site -->
+            <div class="card-custom p-5">
+                <p class="text-xs font-medium text-slate-400">Site</p>
+                <p id="kpiSite" class="text-2xl font-extrabold text-slate-900 mt-4 tracking-wide">ALL SITE</p>
+            </div>
+
+            <!-- Card 4: Sisa Stok Fuel -->
+            <div class="card-custom p-5 flex items-center justify-between">
+                <div>
+                    <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Sisa Stok Fuel</p>
+                    <p id="kpiStok" class="text-2xl font-extrabold text-slate-900 mt-2">0 L</p>
+                </div>
+                <div class="w-12 h-14 bg-slate-900 rounded-lg flex items-center justify-center text-white shadow-sm">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+                    </svg>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Filter Bar Container -->
+        <div class="card-custom p-3.5 flex flex-wrap items-center justify-between gap-3 text-xs">
             <div class="flex flex-wrap items-center gap-3">
                 
-                <!-- Upload 1: Summary Prod -->
-                <div id="dzProd" class="glass-card glow-red border-2 border-red-500 hover:border-red-600 px-3.5 py-2 rounded-xl flex items-center gap-2.5 cursor-pointer transition-all duration-300 group">
-                    <div class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></div>
-                    <svg class="w-4 h-4 text-red-600 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    <div class="text-left">
-                        <p class="text-[10px] font-bold text-slate-700 group-hover:text-red-600 transition">SUMMARY PROD</p>
-                        <p id="lblProd" class="text-[9px] text-slate-500 font-mono truncate max-w-[110px]">Klik / Drop File</p>
-                    </div>
-                    <input type="file" id="inpProd" accept=".xlsx, .xls" class="hidden">
+                <!-- Date Range Filter -->
+                <div class="flex items-center gap-2 bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg text-slate-500">
+                    <span>Tanggal:</span>
+                    <input type="text" placeholder="dd-----yyyy" class="bg-transparent border-none focus:outline-none w-24 text-center font-mono">
+                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    <span>s/d</span>
+                    <input type="text" placeholder="dd-----yyyy" class="bg-transparent border-none focus:outline-none w-24 text-center font-mono">
+                    <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    <button class="text-slate-400 hover:text-slate-600 ml-1">✕</button>
                 </div>
 
-                <!-- Upload 2: Input Time -->
-                <div id="dzInput" class="glass-card glow-amber border-2 border-blue-900 hover:border-blue-950 px-3.5 py-2 rounded-xl flex items-center gap-2.5 cursor-pointer transition-all duration-300 group">
-                    <div class="w-2 h-2 rounded-full bg-blue-900 animate-pulse"></div>
-                    <svg class="w-4 h-4 text-blue-900 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    <div class="text-left">
-                        <p class="text-[10px] font-bold text-slate-700 group-hover:text-blue-900 transition">INPUT TIME</p>
-                        <p id="lblInput" class="text-[9px] text-slate-500 font-mono truncate max-w-[110px]">Klik / Drop File</p>
-                    </div>
-                    <input type="file" id="inpInput" accept=".xlsx, .xls" class="hidden">
+                <!-- Site Dropdown -->
+                <div class="flex items-center gap-1.5">
+                    <span class="text-slate-500">Site:</span>
+                    <select class="bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 font-medium text-slate-700 focus:outline-none">
+                        <option>All Site</option>
+                    </select>
                 </div>
 
-                <!-- Reset Button -->
-                <button onclick="location.reload()" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-blue-900 rounded-xl border-2 border-blue-900 transition" title="Reset Data">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                <!-- Shift Dropdown -->
+                <div class="flex items-center gap-1.5">
+                    <span class="text-slate-500">Shift:</span>
+                    <select class="bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 font-medium text-slate-700 focus:outline-none">
+                        <option>All Shift</option>
+                    </select>
+                </div>
+
+                <!-- Transaction Dropdown -->
+                <div class="flex items-center gap-1.5">
+                    <span class="text-slate-500">Transaction:</span>
+                    <select class="bg-white border border-slate-200 rounded-lg px-2.5 py-1.5 font-medium text-slate-700 focus:outline-none">
+                        <option>All Trx</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <!-- Export / Action Button -->
+            <div>
+                <button class="p-2 bg-white border border-slate-200 hover:bg-slate-50 rounded-lg text-slate-600 transition shadow-sm" title="Export File">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                 </button>
             </div>
-
-        </div>
-    </div>
-
-    <!-- Main Container Dashboard -->
-    <div id="mainDashboard" class="max-w-7xl mx-auto space-y-6">
-        
-        <!-- Futuristic Tabs -->
-        <div class="flex p-1 bg-slate-100 rounded-xl border-2 border-blue-900 shadow-inner max-w-md mx-auto mb-6">
-            <button id="btnTabProd" onclick="switchTab('prod')" class="flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all duration-300 bg-red-600 text-white border border-red-600 shadow">
-                📊 Summary Prod Analytics
-            </button>
-            <button id="btnTabInput" onclick="switchTab('input')" class="flex-1 py-2 px-3 rounded-lg text-xs font-bold text-slate-600 hover:text-blue-900 transition-all duration-300">
-                ⏱️ Input Time Analytics
-            </button>
         </div>
 
-        <!-- ================= MODUL 1: SUMMARY PRODUCTIVITY ================= -->
-        <div id="modulProd" class="space-y-6">
-            <!-- KPI Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div class="glass-card p-4 rounded-2xl border-l-4 border-l-blue-900 border-2 border-blue-900">
-                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Total Record Examined</p>
-                    <p id="prodTotal" class="text-3xl font-black text-blue-950 mt-1">0</p>
+        <!-- Data Table Section -->
+        <div class="card-custom overflow-hidden">
+            
+            <!-- Table Sub-Header -->
+            <div class="p-4 bg-white border-b border-slate-200 flex items-center justify-between">
+                <h2 class="text-xs font-bold text-slate-800 uppercase tracking-wider">RIWAYAT TRANSAKSI</h2>
+                <span class="text-[11px] font-medium text-slate-400">Monitoring Control HO</span>
+            </div>
+
+            <!-- Table Structure -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs">
+                    <thead class="bg-slate-50 border-b border-slate-200 text-slate-600 font-semibold">
+                        <tr>
+                            <th class="p-3.5">Waktu Input</th>
+                            <th class="p-3.5">Site</th>
+                            <th class="p-3.5">Shift</th>
+                            <th class="p-3.5">Storage</th>
+                            <th class="p-3.5">Transaksi</th>
+                            <th class="p-3.5">No Unit</th>
+                            <th class="p-3.5">Material</th>
+                            <th class="p-3.5">Liter</th>
+                            <th class="p-3.5">HM Truck</th>
+                            <th class="p-3.5">Voucher</th>
+                            <th class="p-3.5">PIC</th>
+                            <th class="p-3.5">Evidence Unit</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody" class="divide-y divide-slate-100 text-slate-600">
+                        <!-- Empty Data Placeholder -->
+                        <tr>
+                            <td colspan="12" class="py-16 text-center text-slate-400 font-medium">
+                                Tidak ada data transaksi yang sesuai filter.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Table Pagination & Row Control -->
+            <div class="p-3 bg-white border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+                <div class="flex items-center gap-2">
+                    <span>Tampilkan</span>
+                    <select class="bg-white border border-slate-200 rounded px-2 py-1 text-slate-700 font-medium focus:outline-none">
+                        <option>30</option>
+                        <option>50</option>
+                        <option>100</option>
+                    </select>
+                    <span>Menampilkan 0 data</span>
                 </div>
-                <div class="glass-card p-4 rounded-2xl border-l-4 border-l-red-600 border-2 border-red-500">
-                    <p class="text-[10px] font-bold text-red-600 uppercase tracking-widest">Input SALAH (HM > EWH)</p>
-                    <p id="prodSalah" class="text-3xl font-black text-red-600 mt-1">0</p>
-                </div>
-                <div class="glass-card p-4 rounded-2xl border-l-4 border-l-emerald-600 border-2 border-blue-900">
-                    <p class="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Input VALID (HM ≤ EWH)</p>
-                    <p id="prodValid" class="text-3xl font-black text-emerald-600 mt-1">0</p>
+
+                <div class="flex items-center gap-3">
+                    <button disabled class="px-3 py-1 bg-slate-100 text-slate-400 rounded border border-slate-200 cursor-not-allowed font-medium">← Prev</button>
+                    <span class="font-medium text-slate-700">Halaman 1 dari 1</span>
+                    <button disabled class="px-3 py-1 bg-slate-100 text-slate-400 rounded border border-slate-200 cursor-not-allowed font-medium">Next →</button>
                 </div>
             </div>
 
-            <!-- Chart -->
-            <div class="glass-card p-5 rounded-2xl border-2 border-blue-900">
-                <h3 class="text-xs font-extrabold text-blue-950 uppercase tracking-wider mb-4 border-b-2 border-red-600 pb-2">Top 5 Error by PIC / Operator</h3>
-                <div class="h-60"><canvas id="chartProdPIC"></canvas></div>
-            </div>
-
-            <!-- Table -->
-            <div class="glass-card rounded-2xl overflow-hidden border-2 border-blue-900">
-                <div class="p-4 bg-slate-50 border-b-2 border-blue-900 text-xs font-bold text-blue-950 uppercase tracking-wider">
-                    Rincian Anomali
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs">
-                        <thead class="bg-slate-100 text-slate-700 uppercase text-[10px] tracking-wider font-semibold border-b-2 border-blue-900">
-                            <tr>
-                                <th class="p-3 border-r border-blue-900">No</th>
-                                <th class="p-3 border-r border-blue-900">Unit / CN</th>
-                                <th class="p-3 border-r border-blue-900">PIC / Operator</th>
-                                <th class="p-3 border-r border-blue-900">Status</th>
-                                <th class="p-3 border-r border-blue-900">HM Actual</th>
-                                <th class="p-3 border-r border-blue-900">EWH</th>
-                                <th class="p-3 border-r border-blue-900">Selisih</th>
-                                <th class="p-3">Keterangan</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBodyProd" class="divide-y divide-blue-900"></tbody>
-                    </table>
-                </div>
-            </div>
         </div>
 
-        <!-- ================= MODUL 2: INPUT TIME ================= -->
-        <div id="modulInput" class="space-y-6 hidden">
-            <!-- KPI Cards -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div class="glass-card p-4 rounded-2xl border-l-4 border-l-blue-900 border-2 border-blue-900">
-                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Total Record Input</p>
-                    <p id="inputTotal" class="text-3xl font-black text-blue-950 mt-1">0</p>
-                </div>
-                <div class="glass-card p-4 rounded-2xl border-l-4 border-l-red-600 border-2 border-red-500">
-                    <p class="text-[10px] font-bold text-red-600 uppercase tracking-widest">Input LAMBAT (> 1 Jam)</p>
-                    <p id="inputLambat" class="text-3xl font-black text-red-600 mt-1">0</p>
-                </div>
-                <div class="glass-card p-4 rounded-2xl border-l-4 border-l-emerald-600 border-2 border-blue-900">
-                    <p class="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Input ON-TIME (≤ 1 Jam)</p>
-                    <p id="inputOnTime" class="text-3xl font-black text-emerald-600 mt-1">0</p>
-                </div>
-            </div>
+    </main>
 
-            <!-- Charts -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="glass-card p-5 rounded-2xl border-2 border-blue-900">
-                    <h3 class="text-xs font-extrabold text-blue-950 uppercase tracking-wider mb-4 border-b-2 border-red-600 pb-2">Rasio Ketepatan Waktu Input</h3>
-                    <div class="h-52 flex justify-center"><canvas id="chartInputRatio"></canvas></div>
-                </div>
-                <div class="glass-card p-5 rounded-2xl border-2 border-blue-900">
-                    <h3 class="text-xs font-extrabold text-blue-950 uppercase tracking-wider mb-4 border-b-2 border-red-600 pb-2">Top 5 PIC Delay Input</h3>
-                    <div class="h-52"><canvas id="chartInputPIC"></canvas></div>
-                </div>
-            </div>
-
-            <!-- Table -->
-            <div class="glass-card rounded-2xl overflow-hidden border-2 border-blue-900">
-                <div class="p-4 bg-slate-50 border-b-2 border-blue-900 text-xs font-bold text-blue-950 uppercase tracking-wider">
-                    Rincian Keterlambatan Input Time
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs">
-                        <thead class="bg-slate-100 text-slate-700 uppercase text-[10px] tracking-wider font-semibold border-b-2 border-blue-900">
-                            <tr>
-                                <th class="p-3 border-r border-blue-900">No</th>
-                                <th class="p-3 border-r border-blue-900">Unit / CN</th>
-                                <th class="p-3 border-r border-blue-900">PIC Input</th>
-                                <th class="p-3 border-r border-blue-900">Status</th>
-                                <th class="p-3 border-r border-blue-900">Open Time</th>
-                                <th class="p-3 border-r border-blue-900">Entry Time</th>
-                                <th class="p-3 border-r border-blue-900">Durasi</th>
-                                <th class="p-3">Keterangan</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tableBodyInput" class="divide-y divide-blue-900"></tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <script>
-        let chartProdPICObj = null, chartInputRatioObj = null, chartInputPICObj = null;
-
-        setupCompactBox('dzProd', 'inpProd', (file) => processFileProd(file));
-        setupCompactBox('dzInput', 'inpInput', (file) => processFileInput(file));
-
-        function setupCompactBox(dzId, inpId, callback) {
-            const dz = document.getElementById(dzId);
-            const inp = document.getElementById(inpId);
-
-            dz.addEventListener('click', () => inp.click());
-            dz.addEventListener('dragover', (e) => e.preventDefault());
-            dz.addEventListener('drop', (e) => {
-                e.preventDefault();
-                if (e.dataTransfer.files.length) callback(e.dataTransfer.files[0]);
-            });
-            inp.addEventListener('change', (e) => {
-                if (e.target.files.length) callback(e.target.files[0]);
-            });
-        }
-
-        function switchTab(tab) {
-            const btnProd = document.getElementById('btnTabProd');
-            const btnInput = document.getElementById('btnTabInput');
-            const mProd = document.getElementById('modulProd');
-            const mInput = document.getElementById('modulInput');
-
-            if (tab === 'prod') {
-                mProd.classList.remove('hidden'); mInput.classList.add('hidden');
-                btnProd.className = "flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all duration-300 bg-red-600 text-white border border-red-600 shadow";
-                btnInput.className = "flex-1 py-2 px-3 rounded-lg text-xs font-bold text-slate-600 hover:text-blue-900 transition-all duration-300";
-            } else {
-                mProd.classList.add('hidden'); mInput.classList.remove('hidden');
-                btnInput.className = "flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all duration-300 bg-blue-900 text-white border border-blue-900 shadow";
-                btnProd.className = "flex-1 py-2 px-3 rounded-lg text-xs font-bold text-slate-600 hover:text-blue-900 transition-all duration-300";
-            }
-        }
-
-        function parseNum(val) {
-            if (val === null || val === undefined || val === "") return 0;
-            const str = String(val).replace(',', '.').trim();
-            const num = parseFloat(str);
-            return isNaN(num) ? 0 : num;
-        }
-
-        function readExcel(file, callback) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                const data = new Uint8Array(e.target.result);
-                const workbook = XLSX.read(data, { type: 'array', cellDates: true, cellNF: false, cellText: false });
-                const worksheet = workbook.Sheets[workbook.SheetNames[0]];
-                const rawRows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: "" });
-                callback(rawRows);
-            };
-            reader.readAsArrayBuffer(file);
-        }
-
-        function findHeaderRow(rows) {
-            for (let i = 0; i < Math.min(rows.length, 20); i++) {
-                const line = rows[i].map(c => String(c).toLowerCase().trim()).join(' ');
-                if (line.includes('unit') || line.includes('cn') || line.includes('equipment') || line.includes('hm') || line.includes('open') || line.includes('entry') || line.includes('created')) {
-                    return i;
-                }
-            }
-            return 0; // fallback ke baris pertama
-        }
-
-        // ================= PARSER SUMMARY PRODUCTIVITY =================
-        function processFileProd(file) {
-            document.getElementById('lblProd').innerText = file.name;
-
-            readExcel(file, (rows) => {
-                const hIdx = findHeaderRow(rows);
-                const headers = rows[hIdx].map(h => String(h).trim());
-                const dataRows = rows.slice(hIdx + 1);
-
-                let prodData = [];
-                let picSalahCount = {};
-
-                dataRows.forEach((row) => {
-                    let rowObj = {};
-                    headers.forEach((h, idx) => { if (h) rowObj[h] = row[idx] !== undefined ? row[idx] : ""; });
-
-                    const keys = Object.keys(rowObj);
-                    const unitKey = keys.find(k => /unit|cn|lambung|equipment|no\.?/i.test(k));
-                    const picKey = keys.find(k => /pic|operator|driver|created\s*by|user|pelaksana/i.test(k));
-                    const hmKey = keys.find(k => /hm\s*actual|hm\s*total|^hm$|act\s*hm|hm/i.test(k));
-                    const ewhKey = keys.find(k => /ewh|estimated|est\s*hm|working\s*hour/i.test(k));
-
-                    const unit = unitKey && rowObj[unitKey] ? String(rowObj[unitKey]).trim() : "";
-                    const pic = picKey && rowObj[picKey] ? String(rowObj[picKey]).trim() : "System / Unknown";
-
-                    if (unit !== "" || rowObj[hmKey] !== "" || rowObj[ewhKey] !== "") {
-                        const hmVal = parseNum(rowObj[hmKey]);
-                        const ewhVal = parseNum(rowObj[ewhKey]);
-
-                        if (hmVal > 0 || ewhVal > 0) {
-                            const isSalah = hmVal > ewhVal && ewhVal > 0;
-                            if (isSalah) picSalahCount[pic] = (picSalahCount[pic] || 0) + 1;
-
-                            prodData.push({ unit: unit || "-", pic, hmVal, ewhVal, isSalah, diff: isSalah ? (hmVal - ewhVal).toFixed(2) : 0 });
-                        }
-                    }
-                });
-
-                renderProdModule(prodData, picSalahCount);
-                switchTab('prod');
-            });
-        }
-
-        // ================= PARSER INPUT TIME =================
-        function processFileInput(file) {
-            document.getElementById('lblInput').innerText = file.name;
-
-            readExcel(file, (rows) => {
-                const hIdx = findHeaderRow(rows);
-                const headers = rows[hIdx].map(h => String(h).trim());
-                const dataRows = rows.slice(hIdx + 1);
-
-                let inputData = [];
-                let picLambatCount = {};
-
-                dataRows.forEach((row) => {
-                    let rowObj = {};
-                    headers.forEach((h, idx) => { if (h) rowObj[h] = row[idx] !== undefined ? row[idx] : ""; });
-
-                    const keys = Object.keys(rowObj);
-                    const unitKey = keys.find(k => /unit|cn|lambung|equipment|no\.?/i.test(k));
-                    const picKey = keys.find(k => /pic|operator|driver|created\s*by|user|pelaksana/i.test(k));
-                    const openKey = keys.find(k => /open|event|start|breakdown|time\s*open/i.test(k));
-                    const entryKey = keys.find(k => /entry|input|created|time\s*entry/i.test(k));
-
-                    const unit = unitKey && rowObj[unitKey] ? String(rowObj[unitKey]).trim() : "-";
-                    const pic = picKey && rowObj[picKey] ? String(rowObj[picKey]).trim() : "System / Unknown";
-
-                    if (openKey && entryKey && rowObj[openKey] && rowObj[entryKey]) {
-                        const openTime = new Date(rowObj[openKey]);
-                        const entryTime = new Date(rowObj[entryKey]);
-
-                        if (!isNaN(openTime.getTime()) && !isNaN(entryTime.getTime())) {
-                            const diffMinutes = (entryTime - openTime) / (1000 * 60);
-                            const isLambat = diffMinutes > 60;
-
-                            if (isLambat) picLambatCount[pic] = (picLambatCount[pic] || 0) + 1;
-
-                            inputData.push({ unit, pic, openTime, entryTime, diffMinutes, isLambat });
-                        }
-                    }
-                });
-
-                renderInputModule(inputData, picLambatCount);
-                switchTab('input');
-            });
-        }
-
-        function renderProdModule(data, picSalahCount) {
-            const total = data.length;
-            const salah = data.filter(d => d.isSalah).length;
-            const valid = total - salah;
-
-            document.getElementById('prodTotal').innerText = total;
-            document.getElementById('prodSalah').innerText = salah;
-            document.getElementById('prodValid').innerText = valid;
-
-            let html = "";
-            data.forEach((d, idx) => {
-                html += `
-                    <tr class="${d.isSalah ? 'bg-red-50 font-medium text-red-900' : 'hover:bg-slate-50 text-slate-700'} transition">
-                        <td class="p-3 font-mono text-slate-500 border-r border-blue-900">${idx + 1}</td>
-                        <td class="p-3 font-bold text-blue-950 border-r border-blue-900">${d.unit}</td>
-                        <td class="p-3 border-r border-blue-900">${d.pic}</td>
-                        <td class="p-3 border-r border-blue-900">
-                            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold tracking-wider ${d.isSalah ? 'bg-red-100 text-red-700 border border-red-500' : 'bg-emerald-100 text-emerald-700 border border-emerald-500'}">
-                                ${d.isSalah ? 'SALAH (HM > EWH)' : 'VALID'}
-                            </span>
-                        </td>
-                        <td class="p-3 font-mono border-r border-blue-900">${d.hmVal}</td>
-                        <td class="p-3 font-mono border-r border-blue-900">${d.ewhVal}</td>
-                        <td class="p-3 font-bold border-r border-blue-900 ${d.isSalah ? 'text-red-600' : 'text-slate-500'}">${d.isSalah ? '+' + d.diff + ' Jam' : '-'}</td>
-                        <td class="p-3 text-slate-500 text-[11px]">${d.isSalah ? 'HM melebihi batas EWH' : 'Normal'}</td>
-                    </tr>
-                `;
-            });
-            document.getElementById('tableBodyProd').innerHTML = html || `<tr><td colspan="8" class="p-6 text-center text-slate-500">Tidak ada data ditemukan.</td></tr>`;
-
-            const sortedPIC = Object.entries(picSalahCount).sort((a,b) => b[1] - a[1]).slice(0, 5);
-            const ctx = document.getElementById('chartProdPIC').getContext('2d');
-            if (chartProdPICObj) chartProdPICObj.destroy();
-            chartProdPICObj = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: sortedPIC.map(x => x[0]),
-                    datasets: [{ label: 'Total Input SALAH', data: sortedPIC.map(x => x[1]), backgroundColor: '#dc2626', borderRadius: 8 }]
-                },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#0f172a' } } }, scales: { x: { ticks: { color: '#0f172a' } }, y: { ticks: { color: '#0f172a' } } } }
-            });
-        }
-
-        function renderInputModule(data, picLambatCount) {
-            const total = data.length;
-            const lambat = data.filter(d => d.isLambat).length;
-            const onTime = total - lambat;
-
-            document.getElementById('inputTotal').innerText = total;
-            document.getElementById('inputLambat').innerText = lambat;
-            document.getElementById('inputOnTime').innerText = onTime;
-
-            let html = "";
-            data.forEach((d, idx) => {
-                const openStr = d.openTime.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
-                const entryStr = d.entryTime.toLocaleTimeString('id-ID', {hour:'2-digit', minute:'2-digit'});
-                const durasi = (d.diffMinutes / 60).toFixed(2);
-
-                html += `
-                    <tr class="${d.isLambat ? 'bg-red-50 font-medium text-red-900' : 'hover:bg-slate-50 text-slate-700'} transition">
-                        <td class="p-3 font-mono text-slate-500 border-r border-blue-900">${idx + 1}</td>
-                        <td class="p-3 font-bold text-blue-950 border-r border-blue-900">${d.unit}</td>
-                        <td class="p-3 border-r border-blue-900">${d.pic}</td>
-                        <td class="p-3 border-r border-blue-900">
-                            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold tracking-wider ${d.isLambat ? 'bg-red-100 text-red-700 border border-red-500' : 'bg-emerald-100 text-emerald-700 border border-emerald-500'}">
-                                ${d.isLambat ? 'LAMBAT (> 1 Jam)' : 'ON-TIME'}
-                            </span>
-                        </td>
-                        <td class="p-3 font-mono border-r border-blue-900">${openStr}</td>
-                        <td class="p-3 font-mono border-r border-blue-900">${entryStr}</td>
-                        <td class="p-3 font-bold border-r border-blue-900 ${d.isLambat ? 'text-red-600' : 'text-slate-500'}">${durasi} Jam (${d.diffMinutes.toFixed(0)}m)</td>
-                        <td class="p-3 text-slate-500 text-[11px]">${d.isLambat ? 'Terlambat input > 60 menit' : 'Sesuai SLA'}</td>
-                    </tr>
-                `;
-            });
-            document.getElementById('tableBodyInput').innerHTML = html || `<tr><td colspan="8" class="p-6 text-center text-slate-500">Tidak ada data ditemukan.</td></tr>`;
-
-            const ctxRatio = document.getElementById('chartInputRatio').getContext('2d');
-            if (chartInputRatioObj) chartInputRatioObj.destroy();
-            chartInputRatioObj = new Chart(ctxRatio, {
-                type: 'doughnut',
-                data: { labels: ['On-Time', 'Lambat'], datasets: [{ data: [onTime, lambat], backgroundColor: ['#10b981', '#dc2626'] }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#0f172a' } } } }
-            });
-
-            const sortedPIC = Object.entries(picLambatCount).sort((a,b) => b[1] - a[1]).slice(0, 5);
-            const ctxPIC = document.getElementById('chartInputPIC').getContext('2d');
-            if (chartInputPICObj) chartInputPICObj.destroy();
-            chartInputPICObj = new Chart(ctxPIC, {
-                type: 'bar',
-                data: { labels: sortedPIC.map(x => x[0]), datasets: [{ label: 'Total Input LAMBAT', data: sortedPIC.map(x => x[1]), backgroundColor: '#1e3a8a', borderRadius: 8 }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#0f172a' } } }, scales: { x: { ticks: { color: '#0f172a' } }, y: { ticks: { color: '#0f172a' } } } }
-            });
-        }
-    </script>
 </body>
 </html>
