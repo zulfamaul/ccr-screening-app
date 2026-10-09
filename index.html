@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" class="dark">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,31 +15,31 @@
     <style>
         body { font-family: 'Inter', sans-serif; }
         .glass-card {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: #ffffff;
+            border: 1px solid #1e3a8a;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
-        .glow-red:hover { box-shadow: 0 0 20px rgba(239, 68, 68, 0.35); }
-        .glow-amber:hover { box-shadow: 0 0 20px rgba(245, 158, 11, 0.35); }
+        .glow-red:hover { box-shadow: 0 0 15px rgba(239, 68, 68, 0.25); }
+        .glow-amber:hover { box-shadow: 0 0 15px rgba(30, 58, 138, 0.25); }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen p-4 md:p-6">
+<body class="bg-white text-slate-800 min-h-screen p-4 md:p-6">
 
     <!-- Navbar Header Futuristik -->
-    <div class="max-w-7xl mx-auto glass-card rounded-2xl p-4 md:p-5 mb-6 shadow-2xl relative overflow-hidden">
-        <div class="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-red-500 via-amber-500 to-emerald-500"></div>
+    <div class="max-w-7xl mx-auto glass-card rounded-2xl p-4 md:p-5 mb-6 shadow-md relative overflow-hidden border-2 border-blue-900">
+        <div class="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-red-600 via-blue-900 to-red-600"></div>
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             
             <!-- Branding -->
             <div class="flex items-center space-x-3">
-                <div class="p-2 bg-slate-900/80 rounded-xl border border-slate-800 shadow-inner">
+                <div class="p-2 bg-slate-50 rounded-xl border border-blue-900 shadow-inner">
                     <img src="./logo.png" alt="BNI Logo" class="h-8 w-auto object-contain" onerror="this.onerror=null; this.src='logo.PNG';">
                 </div>
                 <div>
-                    <h1 class="text-lg font-extrabold tracking-wide bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
-                        CCR SCREENING <span class="text-red-500 font-normal"></span>
+                    <h1 class="text-lg font-extrabold tracking-wide text-blue-950">
+                        CCR SCREENING <span class="text-red-600 font-normal"></span>
                     </h1>
-                    <p class="text-[11px] text-slate-400 tracking-wider uppercase font-semibold">Automated Analytics & Anomaly Detection</p>
+                    <p class="text-[11px] text-slate-500 tracking-wider uppercase font-semibold">Automated Analytics & Anomaly Detection</p>
                 </div>
             </div>
 
@@ -47,29 +47,29 @@
             <div class="flex flex-wrap items-center gap-3">
                 
                 <!-- Upload 1: Summary Prod -->
-                <div id="dzProd" class="glass-card glow-red border border-red-500/30 hover:border-red-500 px-3.5 py-2 rounded-xl flex items-center gap-2.5 cursor-pointer transition-all duration-300 group">
-                    <div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
-                    <svg class="w-4 h-4 text-red-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                <div id="dzProd" class="glass-card glow-red border-2 border-red-500 hover:border-red-600 px-3.5 py-2 rounded-xl flex items-center gap-2.5 cursor-pointer transition-all duration-300 group">
+                    <div class="w-2 h-2 rounded-full bg-red-600 animate-pulse"></div>
+                    <svg class="w-4 h-4 text-red-600 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
                     <div class="text-left">
-                        <p class="text-[10px] font-bold text-slate-300 group-hover:text-white transition">SUMMARY PROD</p>
-                        <p id="lblProd" class="text-[9px] text-slate-400 font-mono truncate max-w-[110px]">Klik / Drop File</p>
+                        <p class="text-[10px] font-bold text-slate-700 group-hover:text-red-600 transition">SUMMARY PROD</p>
+                        <p id="lblProd" class="text-[9px] text-slate-500 font-mono truncate max-w-[110px]">Klik / Drop File</p>
                     </div>
                     <input type="file" id="inpProd" accept=".xlsx, .xls" class="hidden">
                 </div>
 
                 <!-- Upload 2: Input Time -->
-                <div id="dzInput" class="glass-card glow-amber border border-amber-500/30 hover:border-amber-500 px-3.5 py-2 rounded-xl flex items-center gap-2.5 cursor-pointer transition-all duration-300 group">
-                    <div class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></div>
-                    <svg class="w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <div id="dzInput" class="glass-card glow-amber border-2 border-blue-900 hover:border-blue-950 px-3.5 py-2 rounded-xl flex items-center gap-2.5 cursor-pointer transition-all duration-300 group">
+                    <div class="w-2 h-2 rounded-full bg-blue-900 animate-pulse"></div>
+                    <svg class="w-4 h-4 text-blue-900 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     <div class="text-left">
-                        <p class="text-[10px] font-bold text-slate-300 group-hover:text-white transition">INPUT TIME</p>
-                        <p id="lblInput" class="text-[9px] text-slate-400 font-mono truncate max-w-[110px]">Klik / Drop File</p>
+                        <p class="text-[10px] font-bold text-slate-700 group-hover:text-blue-900 transition">INPUT TIME</p>
+                        <p id="lblInput" class="text-[9px] text-slate-500 font-mono truncate max-w-[110px]">Klik / Drop File</p>
                     </div>
                     <input type="file" id="inpInput" accept=".xlsx, .xls" class="hidden">
                 </div>
 
                 <!-- Reset Button -->
-                <button onclick="location.reload()" class="p-2 bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white rounded-xl border border-slate-800 transition" title="Reset Data">
+                <button onclick="location.reload()" class="p-2 bg-slate-100 hover:bg-slate-200 text-slate-600 hover:text-blue-900 rounded-xl border-2 border-blue-900 transition" title="Reset Data">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
                 </button>
             </div>
@@ -81,11 +81,11 @@
     <div id="mainDashboard" class="max-w-7xl mx-auto space-y-6">
         
         <!-- Futuristic Tabs -->
-        <div class="flex p-1 bg-slate-900/90 rounded-xl border border-slate-800 shadow-inner max-w-md mx-auto mb-6">
-            <button id="btnTabProd" onclick="switchTab('prod')" class="flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all duration-300 bg-red-600/20 text-red-400 border border-red-500/40 shadow">
+        <div class="flex p-1 bg-slate-100 rounded-xl border-2 border-blue-900 shadow-inner max-w-md mx-auto mb-6">
+            <button id="btnTabProd" onclick="switchTab('prod')" class="flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all duration-300 bg-red-600 text-white border border-red-600 shadow">
                 📊 Summary Prod Analytics
             </button>
-            <button id="btnTabInput" onclick="switchTab('input')" class="flex-1 py-2 px-3 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition-all duration-300">
+            <button id="btnTabInput" onclick="switchTab('input')" class="flex-1 py-2 px-3 rounded-lg text-xs font-bold text-slate-600 hover:text-blue-900 transition-all duration-300">
                 ⏱️ Input Time Analytics
             </button>
         </div>
@@ -94,46 +94,46 @@
         <div id="modulProd" class="space-y-6">
             <!-- KPI Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div class="glass-card p-4 rounded-2xl border-l-4 border-l-slate-600">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Record Examined</p>
-                    <p id="prodTotal" class="text-3xl font-black text-white mt-1">0</p>
+                <div class="glass-card p-4 rounded-2xl border-l-4 border-l-blue-900 border-2 border-blue-900">
+                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Total Record Examined</p>
+                    <p id="prodTotal" class="text-3xl font-black text-blue-950 mt-1">0</p>
                 </div>
-                <div class="glass-card p-4 rounded-2xl border-l-4 border-l-red-500">
-                    <p class="text-[10px] font-bold text-red-400 uppercase tracking-widest">Input SALAH (HM > EWH)</p>
-                    <p id="prodSalah" class="text-3xl font-black text-red-500 mt-1">0</p>
+                <div class="glass-card p-4 rounded-2xl border-l-4 border-l-red-600 border-2 border-red-500">
+                    <p class="text-[10px] font-bold text-red-600 uppercase tracking-widest">Input SALAH (HM > EWH)</p>
+                    <p id="prodSalah" class="text-3xl font-black text-red-600 mt-1">0</p>
                 </div>
-                <div class="glass-card p-4 rounded-2xl border-l-4 border-l-emerald-500">
-                    <p class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">Input VALID (HM ≤ EWH)</p>
-                    <p id="prodValid" class="text-3xl font-black text-emerald-400 mt-1">0</p>
+                <div class="glass-card p-4 rounded-2xl border-l-4 border-l-emerald-600 border-2 border-blue-900">
+                    <p class="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Input VALID (HM ≤ EWH)</p>
+                    <p id="prodValid" class="text-3xl font-black text-emerald-600 mt-1">0</p>
                 </div>
             </div>
 
             <!-- Chart -->
-            <div class="glass-card p-5 rounded-2xl">
-                <h3 class="text-xs font-extrabold text-slate-300 uppercase tracking-wider mb-4 border-b border-slate-800 pb-2">Top 5 Error by PIC / Operator</h3>
+            <div class="glass-card p-5 rounded-2xl border-2 border-blue-900">
+                <h3 class="text-xs font-extrabold text-blue-950 uppercase tracking-wider mb-4 border-b-2 border-red-600 pb-2">Top 5 Error by PIC / Operator</h3>
                 <div class="h-60"><canvas id="chartProdPIC"></canvas></div>
             </div>
 
             <!-- Table -->
-            <div class="glass-card rounded-2xl overflow-hidden border border-slate-800">
-                <div class="p-4 bg-slate-900/60 border-b border-slate-800 text-xs font-bold text-slate-300 uppercase tracking-wider">
+            <div class="glass-card rounded-2xl overflow-hidden border-2 border-blue-900">
+                <div class="p-4 bg-slate-50 border-b-2 border-blue-900 text-xs font-bold text-blue-950 uppercase tracking-wider">
                     Rincian Anomali
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs">
-                        <thead class="bg-slate-900 text-slate-400 uppercase text-[10px] tracking-wider font-semibold border-b border-slate-800">
+                        <thead class="bg-slate-100 text-slate-700 uppercase text-[10px] tracking-wider font-semibold border-b-2 border-blue-900">
                             <tr>
-                                <th class="p-3">No</th>
-                                <th class="p-3">Unit / CN</th>
-                                <th class="p-3">PIC / Operator</th>
-                                <th class="p-3">Status</th>
-                                <th class="p-3">HM Actual</th>
-                                <th class="p-3">EWH</th>
-                                <th class="p-3">Selisih</th>
+                                <th class="p-3 border-r border-blue-900">No</th>
+                                <th class="p-3 border-r border-blue-900">Unit / CN</th>
+                                <th class="p-3 border-r border-blue-900">PIC / Operator</th>
+                                <th class="p-3 border-r border-blue-900">Status</th>
+                                <th class="p-3 border-r border-blue-900">HM Actual</th>
+                                <th class="p-3 border-r border-blue-900">EWH</th>
+                                <th class="p-3 border-r border-blue-900">Selisih</th>
                                 <th class="p-3">Keterangan</th>
                             </tr>
                         </thead>
-                        <tbody id="tableBodyProd" class="divide-y divide-slate-800/60"></tbody>
+                        <tbody id="tableBodyProd" class="divide-y divide-blue-900"></tbody>
                     </table>
                 </div>
             </div>
@@ -143,52 +143,52 @@
         <div id="modulInput" class="space-y-6 hidden">
             <!-- KPI Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <div class="glass-card p-4 rounded-2xl border-l-4 border-l-slate-600">
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Total Record Input</p>
-                    <p id="inputTotal" class="text-3xl font-black text-white mt-1">0</p>
+                <div class="glass-card p-4 rounded-2xl border-l-4 border-l-blue-900 border-2 border-blue-900">
+                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Total Record Input</p>
+                    <p id="inputTotal" class="text-3xl font-black text-blue-950 mt-1">0</p>
                 </div>
-                <div class="glass-card p-4 rounded-2xl border-l-4 border-l-amber-500">
-                    <p class="text-[10px] font-bold text-amber-400 uppercase tracking-widest">Input LAMBAT (> 1 Jam)</p>
-                    <p id="inputLambat" class="text-3xl font-black text-amber-400 mt-1">0</p>
+                <div class="glass-card p-4 rounded-2xl border-l-4 border-l-red-600 border-2 border-red-500">
+                    <p class="text-[10px] font-bold text-red-600 uppercase tracking-widest">Input LAMBAT (> 1 Jam)</p>
+                    <p id="inputLambat" class="text-3xl font-black text-red-600 mt-1">0</p>
                 </div>
-                <div class="glass-card p-4 rounded-2xl border-l-4 border-l-emerald-500">
-                    <p class="text-[10px] font-bold text-emerald-400 uppercase tracking-widest">Input ON-TIME (≤ 1 Jam)</p>
-                    <p id="inputOnTime" class="text-3xl font-black text-emerald-400 mt-1">0</p>
+                <div class="glass-card p-4 rounded-2xl border-l-4 border-l-emerald-600 border-2 border-blue-900">
+                    <p class="text-[10px] font-bold text-emerald-600 uppercase tracking-widest">Input ON-TIME (≤ 1 Jam)</p>
+                    <p id="inputOnTime" class="text-3xl font-black text-emerald-600 mt-1">0</p>
                 </div>
             </div>
 
             <!-- Charts -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="glass-card p-5 rounded-2xl">
-                    <h3 class="text-xs font-extrabold text-slate-300 uppercase tracking-wider mb-4 border-b border-slate-800 pb-2">Rasio Ketepatan Waktu Input</h3>
+                <div class="glass-card p-5 rounded-2xl border-2 border-blue-900">
+                    <h3 class="text-xs font-extrabold text-blue-950 uppercase tracking-wider mb-4 border-b-2 border-red-600 pb-2">Rasio Ketepatan Waktu Input</h3>
                     <div class="h-52 flex justify-center"><canvas id="chartInputRatio"></canvas></div>
                 </div>
-                <div class="glass-card p-5 rounded-2xl">
-                    <h3 class="text-xs font-extrabold text-slate-300 uppercase tracking-wider mb-4 border-b border-slate-800 pb-2">Top 5 PIC Delay Input</h3>
+                <div class="glass-card p-5 rounded-2xl border-2 border-blue-900">
+                    <h3 class="text-xs font-extrabold text-blue-950 uppercase tracking-wider mb-4 border-b-2 border-red-600 pb-2">Top 5 PIC Delay Input</h3>
                     <div class="h-52"><canvas id="chartInputPIC"></canvas></div>
                 </div>
             </div>
 
             <!-- Table -->
-            <div class="glass-card rounded-2xl overflow-hidden border border-slate-800">
-                <div class="p-4 bg-slate-900/60 border-b border-slate-800 text-xs font-bold text-slate-300 uppercase tracking-wider">
+            <div class="glass-card rounded-2xl overflow-hidden border-2 border-blue-900">
+                <div class="p-4 bg-slate-50 border-b-2 border-blue-900 text-xs font-bold text-blue-950 uppercase tracking-wider">
                     Rincian Keterlambatan Input Time
                 </div>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs">
-                        <thead class="bg-slate-900 text-slate-400 uppercase text-[10px] tracking-wider font-semibold border-b border-slate-800">
+                        <thead class="bg-slate-100 text-slate-700 uppercase text-[10px] tracking-wider font-semibold border-b-2 border-blue-900">
                             <tr>
-                                <th class="p-3">No</th>
-                                <th class="p-3">Unit / CN</th>
-                                <th class="p-3">PIC Input</th>
-                                <th class="p-3">Status</th>
-                                <th class="p-3">Open Time</th>
-                                <th class="p-3">Entry Time</th>
-                                <th class="p-3">Durasi</th>
+                                <th class="p-3 border-r border-blue-900">No</th>
+                                <th class="p-3 border-r border-blue-900">Unit / CN</th>
+                                <th class="p-3 border-r border-blue-900">PIC Input</th>
+                                <th class="p-3 border-r border-blue-900">Status</th>
+                                <th class="p-3 border-r border-blue-900">Open Time</th>
+                                <th class="p-3 border-r border-blue-900">Entry Time</th>
+                                <th class="p-3 border-r border-blue-900">Durasi</th>
                                 <th class="p-3">Keterangan</th>
                             </tr>
                         </thead>
-                        <tbody id="tableBodyInput" class="divide-y divide-slate-800/60"></tbody>
+                        <tbody id="tableBodyInput" class="divide-y divide-blue-900"></tbody>
                     </table>
                 </div>
             </div>
@@ -225,12 +225,12 @@
 
             if (tab === 'prod') {
                 mProd.classList.remove('hidden'); mInput.classList.add('hidden');
-                btnProd.className = "flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all duration-300 bg-red-600/20 text-red-400 border border-red-500/40 shadow";
-                btnInput.className = "flex-1 py-2 px-3 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition-all duration-300";
+                btnProd.className = "flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all duration-300 bg-red-600 text-white border border-red-600 shadow";
+                btnInput.className = "flex-1 py-2 px-3 rounded-lg text-xs font-bold text-slate-600 hover:text-blue-900 transition-all duration-300";
             } else {
                 mProd.classList.add('hidden'); mInput.classList.remove('hidden');
-                btnInput.className = "flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all duration-300 bg-amber-600/20 text-amber-400 border border-amber-500/40 shadow";
-                btnProd.className = "flex-1 py-2 px-3 rounded-lg text-xs font-bold text-slate-400 hover:text-white transition-all duration-300";
+                btnInput.className = "flex-1 py-2 px-3 rounded-lg text-xs font-bold transition-all duration-300 bg-blue-900 text-white border border-blue-900 shadow";
+                btnProd.className = "flex-1 py-2 px-3 rounded-lg text-xs font-bold text-slate-600 hover:text-blue-900 transition-all duration-300";
             }
         }
 
@@ -363,19 +363,19 @@
             let html = "";
             data.forEach((d, idx) => {
                 html += `
-                    <tr class="${d.isSalah ? 'bg-red-500/10 font-medium text-red-200' : 'hover:bg-slate-800/40 text-slate-300'} transition">
-                        <td class="p-3 font-mono text-slate-500">${idx + 1}</td>
-                        <td class="p-3 font-bold text-white">${d.unit}</td>
-                        <td class="p-3">${d.pic}</td>
-                        <td class="p-3">
-                            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold tracking-wider ${d.isSalah ? 'bg-red-500/20 text-red-400 border border-red-500/30' : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'}">
+                    <tr class="${d.isSalah ? 'bg-red-50 font-medium text-red-900' : 'hover:bg-slate-50 text-slate-700'} transition">
+                        <td class="p-3 font-mono text-slate-500 border-r border-blue-900">${idx + 1}</td>
+                        <td class="p-3 font-bold text-blue-950 border-r border-blue-900">${d.unit}</td>
+                        <td class="p-3 border-r border-blue-900">${d.pic}</td>
+                        <td class="p-3 border-r border-blue-900">
+                            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold tracking-wider ${d.isSalah ? 'bg-red-100 text-red-700 border border-red-500' : 'bg-emerald-100 text-emerald-700 border border-emerald-500'}">
                                 ${d.isSalah ? 'SALAH (HM > EWH)' : 'VALID'}
                             </span>
                         </td>
-                        <td class="p-3 font-mono">${d.hmVal}</td>
-                        <td class="p-3 font-mono">${d.ewhVal}</td>
-                        <td class="p-3 font-bold ${d.isSalah ? 'text-red-400' : 'text-slate-500'}">${d.isSalah ? '+' + d.diff + ' Jam' : '-'}</td>
-                        <td class="p-3 text-slate-400 text-[11px]">${d.isSalah ? 'HM melebihi batas EWH' : 'Normal'}</td>
+                        <td class="p-3 font-mono border-r border-blue-900">${d.hmVal}</td>
+                        <td class="p-3 font-mono border-r border-blue-900">${d.ewhVal}</td>
+                        <td class="p-3 font-bold border-r border-blue-900 ${d.isSalah ? 'text-red-600' : 'text-slate-500'}">${d.isSalah ? '+' + d.diff + ' Jam' : '-'}</td>
+                        <td class="p-3 text-slate-500 text-[11px]">${d.isSalah ? 'HM melebihi batas EWH' : 'Normal'}</td>
                     </tr>
                 `;
             });
@@ -388,9 +388,9 @@
                 type: 'bar',
                 data: {
                     labels: sortedPIC.map(x => x[0]),
-                    datasets: [{ label: 'Total Input SALAH', data: sortedPIC.map(x => x[1]), backgroundColor: '#ef4444', borderRadius: 8 }]
+                    datasets: [{ label: 'Total Input SALAH', data: sortedPIC.map(x => x[1]), backgroundColor: '#dc2626', borderRadius: 8 }]
                 },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#94a3b8' } } }, scales: { x: { ticks: { color: '#94a3b8' } }, y: { ticks: { color: '#94a3b8' } } } }
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#0f172a' } } }, scales: { x: { ticks: { color: '#0f172a' } }, y: { ticks: { color: '#0f172a' } } } }
             });
         }
 
@@ -410,19 +410,19 @@
                 const durasi = (d.diffMinutes / 60).toFixed(2);
 
                 html += `
-                    <tr class="${d.isLambat ? 'bg-amber-500/10 font-medium text-amber-200' : 'hover:bg-slate-800/40 text-slate-300'} transition">
-                        <td class="p-3 font-mono text-slate-500">${idx + 1}</td>
-                        <td class="p-3 font-bold text-white">${d.unit}</td>
-                        <td class="p-3">${d.pic}</td>
-                        <td class="p-3">
-                            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold tracking-wider ${d.isLambat ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30' : 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'}">
+                    <tr class="${d.isLambat ? 'bg-red-50 font-medium text-red-900' : 'hover:bg-slate-50 text-slate-700'} transition">
+                        <td class="p-3 font-mono text-slate-500 border-r border-blue-900">${idx + 1}</td>
+                        <td class="p-3 font-bold text-blue-950 border-r border-blue-900">${d.unit}</td>
+                        <td class="p-3 border-r border-blue-900">${d.pic}</td>
+                        <td class="p-3 border-r border-blue-900">
+                            <span class="px-2 py-0.5 rounded-full text-[9px] font-bold tracking-wider ${d.isLambat ? 'bg-red-100 text-red-700 border border-red-500' : 'bg-emerald-100 text-emerald-700 border border-emerald-500'}">
                                 ${d.isLambat ? 'LAMBAT (> 1 Jam)' : 'ON-TIME'}
                             </span>
                         </td>
-                        <td class="p-3 font-mono">${openStr}</td>
-                        <td class="p-3 font-mono">${entryStr}</td>
-                        <td class="p-3 font-bold ${d.isLambat ? 'text-amber-400' : 'text-slate-500'}">${durasi} Jam (${d.diffMinutes.toFixed(0)}m)</td>
-                        <td class="p-3 text-slate-400 text-[11px]">${d.isLambat ? 'Terlambat input > 60 menit' : 'Sesuai SLA'}</td>
+                        <td class="p-3 font-mono border-r border-blue-900">${openStr}</td>
+                        <td class="p-3 font-mono border-r border-blue-900">${entryStr}</td>
+                        <td class="p-3 font-bold border-r border-blue-900 ${d.isLambat ? 'text-red-600' : 'text-slate-500'}">${durasi} Jam (${d.diffMinutes.toFixed(0)}m)</td>
+                        <td class="p-3 text-slate-500 text-[11px]">${d.isLambat ? 'Terlambat input > 60 menit' : 'Sesuai SLA'}</td>
                     </tr>
                 `;
             });
@@ -432,8 +432,8 @@
             if (chartInputRatioObj) chartInputRatioObj.destroy();
             chartInputRatioObj = new Chart(ctxRatio, {
                 type: 'doughnut',
-                data: { labels: ['On-Time', 'Lambat'], datasets: [{ data: [onTime, lambat], backgroundColor: ['#10b981', '#f59e0b'] }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#94a3b8' } } } }
+                data: { labels: ['On-Time', 'Lambat'], datasets: [{ data: [onTime, lambat], backgroundColor: ['#10b981', '#dc2626'] }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#0f172a' } } } }
             });
 
             const sortedPIC = Object.entries(picLambatCount).sort((a,b) => b[1] - a[1]).slice(0, 5);
@@ -441,8 +441,8 @@
             if (chartInputPICObj) chartInputPICObj.destroy();
             chartInputPICObj = new Chart(ctxPIC, {
                 type: 'bar',
-                data: { labels: sortedPIC.map(x => x[0]), datasets: [{ label: 'Total Input LAMBAT', data: sortedPIC.map(x => x[1]), backgroundColor: '#f59e0b', borderRadius: 8 }] },
-                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#94a3b8' } } }, scales: { x: { ticks: { color: '#94a3b8' } }, y: { ticks: { color: '#94a3b8' } } } }
+                data: { labels: sortedPIC.map(x => x[0]), datasets: [{ label: 'Total Input LAMBAT', data: sortedPIC.map(x => x[1]), backgroundColor: '#1e3a8a', borderRadius: 8 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#0f172a' } } }, scales: { x: { ticks: { color: '#0f172a' } }, y: { ticks: { color: '#0f172a' } } } }
             });
         }
     </script>
